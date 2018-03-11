@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "GitHubRelease"
-  s.version      = "0.0.1"
+  s.version      = "0.1.0"
   s.summary      = "Check your GitHub repo for new releases."
 
   # This description is used to generate tags and improve search results.
@@ -80,9 +80,8 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  # s.source       = { :git => "https://github.com/MarLoe/GitHub.Release.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/MarLoe/GitHub.Release.git", :tag => "v#{s.version}" }
   # s.source       = { :git => "https://github.com/MarLoe/GitHub.Release.git" }
-  s.source       = { :git => "." }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
