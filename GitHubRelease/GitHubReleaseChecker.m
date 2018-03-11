@@ -56,87 +56,92 @@ NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseChe
 //
 //    [request setHTTPBody:postData];
     
-    
+    __weak GitHubReleaseChecker *weakSelf = self;
     NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        
-        if (error != nil) {
+        [weakSelf handleReposnseForReleaseName:releaseName data:data response:response error:error];
+    }];
+
+    [postDataTask resume];
+}
+
+
+- (void)handleReposnseForReleaseName:(NSString*)releaseName data:(NSData*)data response:(NSURLResponse*)response error:(NSError*)error
+{
+    __weak GitHubReleaseChecker *weakSelf = self;
+    if (error != nil) {
+        NSLog(@"%@", error);
+        if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:failedWithError:)]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.delegate gitHubReleaseChecker:self checkRelease:releaseName failedWithError:error];
+            });
+        }
+        return;
+    }
+    
+    if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+        if (httpResponse.statusCode != 200) {
+            error = [NSError errorWithDomain:NSURLErrorDomain code:httpResponse.statusCode userInfo:nil];
             NSLog(@"%@", error);
             if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:failedWithError:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [_delegate gitHubReleaseChecker:self checkRelease:releaseName failedWithError:error];
+                    [weakSelf.delegate gitHubReleaseChecker:self checkRelease:releaseName failedWithError:error];
                 });
             }
             return;
         }
-        
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
-            if (httpResponse.statusCode != 200) {
-                error = [NSError errorWithDomain:NSURLErrorDomain code:httpResponse.statusCode userInfo:nil];
-                NSLog(@"%@", error);
-                if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:failedWithError:)]) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [_delegate gitHubReleaseChecker:self checkRelease:releaseName failedWithError:error];
-                    });
-                }
-                return;
-            }
-        }
-        
-        NSArray* releasesArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-        if (error != nil) {
-            if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:failedWithError:)]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_delegate gitHubReleaseChecker:self checkRelease:releaseName failedWithError:error];
-                });
-            }
-            return;
-        }
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name == %@", releaseName];
-        _currentRelease = [[releasesArray filteredArrayUsingPredicate:predicate] firstObject];
-        if (_currentRelease == nil) {
-            if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:failedWithError:)]) {
-                NSString* localizedDescription = [NSString stringWithFormat:NSLocalizedString(@"Release with name '%@' was not found", -), releaseName];
-                error = [NSError errorWithDomain:GitHubReleaseCheckerErrorDomain code:GitHubReleaseCheckerErrorNotFound userInfo:@{ NSLocalizedDescriptionKey : localizedDescription }];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_delegate gitHubReleaseChecker:self checkRelease:releaseName failedWithError:error];
-                });
-            }
-            return;
-        }
-
-        if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:foundReleaseInfo:)]) {
+    }
+    
+    NSArray* releasesArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if (error != nil) {
+        if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:failedWithError:)]) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [_delegate gitHubReleaseChecker:self checkRelease:releaseName foundReleaseInfo:_currentRelease];
+                [weakSelf.delegate gitHubReleaseChecker:self checkRelease:releaseName failedWithError:error];
             });
         }
-        
-        if (!_includeDraft) {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"draft == %i", 0];
-            releasesArray = [releasesArray filteredArrayUsingPredicate:predicate];
-        }
-
-        if (!_includePrerelease) {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"prerelease == %i", 0];
-            releasesArray = [releasesArray filteredArrayUsingPredicate:predicate];
-        }
-        
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"published_at" ascending:NO];
-        releasesArray = [releasesArray sortedArrayUsingDescriptors:@[sortDescriptor]];
-        _availableRelease = releasesArray.firstObject;
-        if (_availableRelease != _currentRelease) {
-            // New release available
-            if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:foundNewReleaseInfo:)]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_delegate gitHubReleaseChecker:self checkRelease:releaseName foundNewReleaseInfo:_availableRelease];
-                });
-            }
-        }
-
-    }];
+        return;
+    }
     
-    [postDataTask resume];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name == %@", releaseName];
+    _currentRelease = [[releasesArray filteredArrayUsingPredicate:predicate] firstObject];
+    if (_currentRelease == nil) {
+        if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:failedWithError:)]) {
+            NSString* localizedDescription = [NSString stringWithFormat:NSLocalizedString(@"Release with name '%@' was not found", -), releaseName];
+            error = [NSError errorWithDomain:GitHubReleaseCheckerErrorDomain code:GitHubReleaseCheckerErrorNotFound userInfo:@{ NSLocalizedDescriptionKey : localizedDescription }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.delegate gitHubReleaseChecker:self checkRelease:releaseName failedWithError:error];
+            });
+        }
+        return;
+    }
+    
+    if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:foundReleaseInfo:)]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.delegate gitHubReleaseChecker:self checkRelease:releaseName foundReleaseInfo:weakSelf.currentRelease];
+        });
+    }
+    
+    if (!_includeDraft) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"draft == %i", 0];
+        releasesArray = [releasesArray filteredArrayUsingPredicate:predicate];
+    }
+    
+    if (!_includePrerelease) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"prerelease == %i", 0];
+        releasesArray = [releasesArray filteredArrayUsingPredicate:predicate];
+    }
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"published_at" ascending:NO];
+    releasesArray = [releasesArray sortedArrayUsingDescriptors:@[sortDescriptor]];
+    _availableRelease = releasesArray.firstObject;
+    if (_availableRelease != _currentRelease) {
+        // New release available
+        if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:foundNewReleaseInfo:)]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.delegate gitHubReleaseChecker:self checkRelease:releaseName foundNewReleaseInfo:weakSelf.availableRelease];
+            });
+        }
+    }
 }
 
 @end
