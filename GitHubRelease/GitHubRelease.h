@@ -6,7 +6,7 @@
 //  Copyright © 2018 Martin Løbger. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for GitHubRelease.
 FOUNDATION_EXPORT double GitHubReleaseVersionNumber;
