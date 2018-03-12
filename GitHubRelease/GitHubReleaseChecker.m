@@ -10,6 +10,7 @@
 
 
 NSString* const kGitHubReleaseCheckerNameKey                = @"name";
+NSString* const kGitHubReleaseCheckerHtmlUrlKey             = @"html_url";
 NSString* const kGitHubReleaseCheckerAssetsKey              = @"assets";
 
 

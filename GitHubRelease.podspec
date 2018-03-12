@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   s.description  = <<-DESC
       Using GitHub to host your software?
       Want to check for new releases?
-      The use GitHubRelease to check if a new release has been published.
+      Use GitHubRelease to check if a new release has been published.
       Prereleases and drafts can be opted in via configuration.
                   DESC
 
@@ -81,7 +81,6 @@ Pod::Spec.new do |s|
   #
 
   s.source       = { :git => "https://github.com/MarLoe/GitHub.Release.git", :tag => "v#{s.version}" }
-  # s.source       = { :git => "https://github.com/MarLoe/GitHub.Release.git" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

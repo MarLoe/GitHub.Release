@@ -10,6 +10,7 @@
 
 
 FOUNDATION_EXPORT NSString* const kGitHubReleaseCheckerNameKey;
+FOUNDATION_EXPORT NSString* const kGitHubReleaseCheckerHtmlUrlKey;
 FOUNDATION_EXPORT NSString* const kGitHubReleaseCheckerAssetsKey;
 
 
