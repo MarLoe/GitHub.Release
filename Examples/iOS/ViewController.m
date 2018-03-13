@@ -1,6 +1,6 @@
 //
 //  ViewController.m
-//  Test.iOS
+//  Example.iOS
 //
 //  Created by Martin Løbger on 12/03/2018.
 //  Copyright © 2018 Martin Løbger. All rights reserved.
