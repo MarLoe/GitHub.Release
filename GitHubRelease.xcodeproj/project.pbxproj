@@ -61,7 +61,7 @@
 		6D9F5E54204F434200A984CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D9F5E67204F439B00A984CC /* GitHubReleaseChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitHubReleaseChecker.h; sourceTree = "<group>"; };
 		6D9F5E68204F439B00A984CC /* GitHubReleaseChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitHubReleaseChecker.m; sourceTree = "<group>"; };
-		6D9F5E7E204F4E9900A984CC /* GitHubRelease.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GitHubRelease.podspec; sourceTree = "<group>"; };
+		6D9F5E7E204F4E9900A984CC /* GitHubRelease.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = GitHubRelease.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		6D9F5E9E20571FC500A984CC /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		6D9F5E9F20571FC500A984CC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6D9F5ECC2057240600A984CC /* Test.macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test.macOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
