@@ -14,8 +14,8 @@
 		6D622A5B2058833E00C35903 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D622A5A2058833E00C35903 /* main.m */; };
 		6D622A61205883AA00C35903 /* GitHubRelease.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9F5E50204F434100A984CC /* GitHubRelease.framework */; };
 		6D9F5E55204F434200A984CC /* GitHubRelease.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D9F5E53204F434100A984CC /* GitHubRelease.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6D9F5E69204F439B00A984CC /* GitHubReleaseChecker.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D9F5E67204F439B00A984CC /* GitHubReleaseChecker.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6D9F5E6A204F439B00A984CC /* GitHubReleaseChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D9F5E68204F439B00A984CC /* GitHubReleaseChecker.m */; };
+		6D9F5E69204F439B00A984CC /* MLGitHubReleaseChecker.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D9F5E67204F439B00A984CC /* MLGitHubReleaseChecker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6D9F5E6A204F439B00A984CC /* MLGitHubReleaseChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D9F5E68204F439B00A984CC /* MLGitHubReleaseChecker.m */; };
 		6D9F5F2220572ECC00A984CC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D9F5F2120572ECC00A984CC /* AppDelegate.m */; };
 		6D9F5F2520572ECC00A984CC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D9F5F2420572ECC00A984CC /* ViewController.m */; };
 		6D9F5F2820572ECC00A984CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D9F5F2620572ECC00A984CC /* Main.storyboard */; };
@@ -44,8 +44,8 @@
 		6D9F5E50204F434100A984CC /* GitHubRelease.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GitHubRelease.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D9F5E53204F434100A984CC /* GitHubRelease.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GitHubRelease.h; sourceTree = "<group>"; };
 		6D9F5E54204F434200A984CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6D9F5E67204F439B00A984CC /* GitHubReleaseChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitHubReleaseChecker.h; sourceTree = "<group>"; };
-		6D9F5E68204F439B00A984CC /* GitHubReleaseChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitHubReleaseChecker.m; sourceTree = "<group>"; };
+		6D9F5E67204F439B00A984CC /* MLGitHubReleaseChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLGitHubReleaseChecker.h; sourceTree = "<group>"; };
+		6D9F5E68204F439B00A984CC /* MLGitHubReleaseChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLGitHubReleaseChecker.m; sourceTree = "<group>"; };
 		6D9F5E7E204F4E9900A984CC /* GitHubRelease.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = GitHubRelease.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		6D9F5E9E20571FC500A984CC /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		6D9F5E9F20571FC500A984CC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -158,8 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				6D9F5E53204F434100A984CC /* GitHubRelease.h */,
-				6D9F5E67204F439B00A984CC /* GitHubReleaseChecker.h */,
-				6D9F5E68204F439B00A984CC /* GitHubReleaseChecker.m */,
+				6D9F5E67204F439B00A984CC /* MLGitHubReleaseChecker.h */,
+				6D9F5E68204F439B00A984CC /* MLGitHubReleaseChecker.m */,
 				6D9F5E54204F434200A984CC /* Info.plist */,
 			);
 			path = GitHubRelease;
@@ -211,7 +211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D9F5E55204F434200A984CC /* GitHubRelease.h in Headers */,
-				6D9F5E69204F439B00A984CC /* GitHubReleaseChecker.h in Headers */,
+				6D9F5E69204F439B00A984CC /* MLGitHubReleaseChecker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +293,7 @@
 		6D9F5E47204F434100A984CC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = ML;
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Martin Løbger";
 				TargetAttributes = {
@@ -393,7 +394,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D9F5E6A204F439B00A984CC /* GitHubReleaseChecker.m in Sources */,
+				6D9F5E6A204F439B00A984CC /* MLGitHubReleaseChecker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

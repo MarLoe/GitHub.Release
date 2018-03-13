@@ -15,5 +15,5 @@ FOUNDATION_EXPORT double GitHubReleaseVersionNumber;
 FOUNDATION_EXPORT const unsigned char GitHubReleaseVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <GitHubRelease/PublicHeader.h>
-#import <GitHubRelease/GitHubReleaseChecker.h>
+#import <GitHubRelease/MLGitHubReleaseChecker.h>
 

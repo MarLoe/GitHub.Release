@@ -6,7 +6,7 @@
 //  Copyright © 2018 ML-Consulting. All rights reserved.
 //
 
-#import "GitHubReleaseChecker.h"
+#import "MLGitHubReleaseChecker.h"
 
 
 NSString* const kGitHubReleaseCheckerNameKey                = @"name";
@@ -16,12 +16,12 @@ NSString* const kGitHubReleaseCheckerAssetsKey              = @"assets";
 
 NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseCheckerErrorDomain";
 
-@interface GitHubReleaseChecker (NSURLSessionDelegate) <NSURLSessionDelegate>
+@interface MLGitHubReleaseChecker (NSURLSessionDelegate) <NSURLSessionDelegate>
 @end
 
 // curl -i https://api.github.com/repos/MarLoe/VMware.PreferencePane/releases
 
-@implementation GitHubReleaseChecker
+@implementation MLGitHubReleaseChecker
 
 - (instancetype)initWithUser:(NSString*)user andProject:(NSString*)project
 {
@@ -57,7 +57,7 @@ NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseChe
 //
 //    [request setHTTPBody:postData];
     
-    __weak GitHubReleaseChecker *weakSelf = self;
+    __weak MLGitHubReleaseChecker *weakSelf = self;
     NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         [weakSelf handleReposnseForReleaseName:releaseName data:data response:response error:error];
     }];
@@ -66,9 +66,15 @@ NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseChe
 }
 
 
+- (void)downloadAssetNamed:(NSString*)assetName
+{
+    
+}
+
+
 - (void)handleReposnseForReleaseName:(NSString*)releaseName data:(NSData*)data response:(NSURLResponse*)response error:(NSError*)error
 {
-    __weak GitHubReleaseChecker *weakSelf = self;
+    __weak MLGitHubReleaseChecker *weakSelf = self;
     if (error != nil) {
         NSLog(@"%@", error);
         if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:failedWithError:)]) {

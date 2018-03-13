@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 FOUNDATION_EXPORT NSString* const kGitHubReleaseCheckerNameKey;
 FOUNDATION_EXPORT NSString* const kGitHubReleaseCheckerHtmlUrlKey;
 FOUNDATION_EXPORT NSString* const kGitHubReleaseCheckerAssetsKey;
@@ -23,21 +22,22 @@ NS_ERROR_ENUM(GitHubReleaseCheckerErrorDomain)
 };
 
 
-@class GitHubReleaseChecker;
+@class MLGitHubRelease;
+@class MLGitHubReleaseChecker;
 
 
 @protocol GitHubReleaseCheckerDelegate <NSObject>
 
-- (void)gitHubReleaseChecker:(GitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(NSDictionary*)releaseInfo;
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(NSDictionary*)releaseInfo;
 
-- (void)gitHubReleaseChecker:(GitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(NSDictionary*)releaseInfo;
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(NSDictionary*)releaseInfo;
 
-- (void)gitHubReleaseChecker:(GitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName failedWithError:(NSError*)error;
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName failedWithError:(NSError*)error;
 
 @end
 
 
-@interface GitHubReleaseChecker : NSObject
+@interface MLGitHubReleaseChecker : NSObject
 
 @property (nonatomic, readonly) NSURL* url;
 @property (nonatomic, readonly) NSString* user;
@@ -54,5 +54,7 @@ NS_ERROR_ENUM(GitHubReleaseCheckerErrorDomain)
 - (instancetype)initWithUser:(NSString*)user andProject:(NSString*)project;
 
 - (void)checkRelease:(NSString*)releaseName;
+
+- (void)downloadAssetNamed:(NSString*)assetName;
 
 @end

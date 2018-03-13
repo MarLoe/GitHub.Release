@@ -12,7 +12,7 @@
 @interface ViewController : NSViewController <GitHubReleaseCheckerDelegate>
 
 @property (nonatomic, readonly) NSString* version;
-@property (nonatomic, strong) GitHubReleaseChecker* releaseChecker;
+@property (nonatomic, strong) MLGitHubReleaseChecker* releaseChecker;
 
 @end
 

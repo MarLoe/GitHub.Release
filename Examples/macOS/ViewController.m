@@ -20,7 +20,7 @@
     // Try setting _version to something old
     //_version = @"0.1.0";
 
-    self.releaseChecker = [[GitHubReleaseChecker alloc] initWithUser:@"MarLoe" andProject:@"GitHub.Release"];
+    self.releaseChecker = [[MLGitHubReleaseChecker alloc] initWithUser:@"MarLoe" andProject:@"GitHub.Release"];
     _releaseChecker.delegate = self;
     [_releaseChecker checkRelease:_version];
 }
@@ -36,13 +36,13 @@
 
 #pragma mark - GitHubReleaseCheckerDelegate
 
-- (void)gitHubReleaseChecker:(GitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(NSDictionary*)releaseInfo
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(NSDictionary*)releaseInfo
 {
     NSLog(@"%@", releaseInfo);
 }
 
 
-- (void)gitHubReleaseChecker:(GitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(NSDictionary*)releaseInfo
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(NSDictionary*)releaseInfo
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     if ([[userDefaults stringForKey:@"skip"] isEqualToString:releaseInfo[kGitHubReleaseCheckerNameKey]]) {
@@ -81,7 +81,7 @@
 }
 
 
-- (void)gitHubReleaseChecker:(GitHubReleaseChecker *)sender checkRelease:(NSString *)releaseName failedWithError:(NSError *)error
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker *)sender checkRelease:(NSString *)releaseName failedWithError:(NSError *)error
 {
     NSLog(@"%@", error);
 }
