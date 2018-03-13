@@ -36,21 +36,21 @@
 
 #pragma mark - GitHubReleaseCheckerDelegate
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(NSDictionary*)releaseInfo
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
     NSLog(@"%@", releaseInfo);
 }
 
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(NSDictionary*)releaseInfo
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    if ([[userDefaults stringForKey:@"skip"] isEqualToString:releaseInfo[kGitHubReleaseCheckerNameKey]]) {
+    if ([[userDefaults stringForKey:@"skip"] isEqualToString:releaseInfo.name]) {
         // The user has opted out of more alerts regarding this version.
         return;
     }
 
-    NSString* repoUrl = releaseInfo[kGitHubReleaseCheckerHtmlUrlKey];
+    NSString* repoUrl = releaseInfo.htmlURL;
     if (repoUrl.length == 0) {
         return;
     }
@@ -60,7 +60,7 @@
     alert.showsSuppressionButton = YES; // Uses default checkbox title
     alert.messageText = NSLocalizedString(@"A new version is available", -);
     alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"Version %@ is available. You are currently running %@", -),
-                             releaseInfo[kGitHubReleaseCheckerNameKey],
+                             releaseInfo.name,
                              releaseName
                              ];
     [alert addButtonWithTitle:NSLocalizedString(@"View", -)];
@@ -69,7 +69,7 @@
     [alert beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
         if (alert.suppressionButton.state == NSOnState) {
             // Suppress this alert from now on
-            [userDefaults setObject:releaseInfo[kGitHubReleaseCheckerNameKey] forKey:@"skip"];
+            [userDefaults setObject:releaseInfo.name forKey:@"skip"];
         }
         
         if (returnCode == NSModalResponseCancel) {

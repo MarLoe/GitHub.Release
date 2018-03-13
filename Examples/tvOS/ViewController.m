@@ -34,21 +34,21 @@
 
 #pragma mark - GitHubReleaseCheckerDelegate
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(NSDictionary*)releaseInfo
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
     NSLog(@"%@: %@", releaseName, releaseInfo);
 }
 
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(NSDictionary*)releaseInfo
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
-    NSString* repoUrl = releaseInfo[kGitHubReleaseCheckerHtmlUrlKey];
+    NSString* repoUrl = releaseInfo.htmlURL;
     if (repoUrl.length == 0) {
         return;
     }
     
     NSString* message = [NSString stringWithFormat:NSLocalizedString(@"Version %@ is available. You are currently running %@", -),
-                         releaseInfo[kGitHubReleaseCheckerNameKey],
+                         releaseInfo.name,
                          releaseName
                          ];
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Update Available"

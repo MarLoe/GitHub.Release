@@ -8,17 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-FOUNDATION_EXPORT NSString* const kGitHubReleaseCheckerNameKey;
-FOUNDATION_EXPORT NSString* const kGitHubReleaseCheckerHtmlUrlKey;
-FOUNDATION_EXPORT NSString* const kGitHubReleaseCheckerAssetsKey;
-
 
 FOUNDATION_EXPORT NSErrorDomain const GitHubReleaseCheckerErrorDomain;
 
 NS_ERROR_ENUM(GitHubReleaseCheckerErrorDomain)
 {
     GitHubReleaseCheckerErrorUnknown            =   -1,
-    GitHubReleaseCheckerErrorNotFound           = -404
+    GitHubReleaseCheckerErrorNotFound           = -404,
 };
 
 
@@ -28,9 +24,9 @@ NS_ERROR_ENUM(GitHubReleaseCheckerErrorDomain)
 
 @protocol GitHubReleaseCheckerDelegate <NSObject>
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(NSDictionary*)releaseInfo;
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(MLGitHubRelease*)releaseInfo;
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(NSDictionary*)releaseInfo;
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo;
 
 - (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName failedWithError:(NSError*)error;
 
@@ -43,8 +39,8 @@ NS_ERROR_ENUM(GitHubReleaseCheckerErrorDomain)
 @property (nonatomic, readonly) NSString* user;
 @property (nonatomic, readonly) NSString* project;
 
-@property (nonatomic, readonly) NSDictionary* currentRelease;
-@property (nonatomic, readonly) NSDictionary* availableRelease;
+@property (nonatomic, readonly) MLGitHubRelease* currentRelease;
+@property (nonatomic, readonly) MLGitHubRelease* availableRelease;
 
 @property (nonatomic, assign) BOOL includeDraft;
 @property (nonatomic, assign) BOOL includePrerelease;

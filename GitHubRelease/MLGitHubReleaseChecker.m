@@ -7,12 +7,7 @@
 //
 
 #import "MLGitHubReleaseChecker.h"
-
-
-NSString* const kGitHubReleaseCheckerNameKey                = @"name";
-NSString* const kGitHubReleaseCheckerHtmlUrlKey             = @"html_url";
-NSString* const kGitHubReleaseCheckerAssetsKey              = @"assets";
-
+#import "MLGitHubRelease.h"
 
 NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseCheckerErrorDomain";
 
@@ -99,7 +94,7 @@ NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseChe
         }
     }
     
-    NSArray* releasesArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    MLGitHubReleases* releasesArray = MLGitHubReleaseFromData(data, &error);
     if (error != nil) {
         if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:failedWithError:)]) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -110,7 +105,7 @@ NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseChe
     }
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name == %@", releaseName];
-    _currentRelease = [[releasesArray filteredArrayUsingPredicate:predicate] firstObject];
+    _currentRelease = [releasesArray filteredArrayUsingPredicate:predicate].firstObject;
     if (_currentRelease == nil) {
         if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:failedWithError:)]) {
             NSString* localizedDescription = [NSString stringWithFormat:NSLocalizedString(@"Release with name '%@' was not found", -), releaseName];
@@ -121,7 +116,7 @@ NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseChe
         }
         return;
     }
-    
+
     if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:checkRelease:foundReleaseInfo:)]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.delegate gitHubReleaseChecker:self checkRelease:releaseName foundReleaseInfo:weakSelf.currentRelease];
@@ -129,16 +124,16 @@ NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseChe
     }
     
     if (!_includeDraft) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"draft == %i", 0];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isDraft == %i", 0];
         releasesArray = [releasesArray filteredArrayUsingPredicate:predicate];
     }
     
     if (!_includePrerelease) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"prerelease == %i", 0];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isPrerelease == %i", 0];
         releasesArray = [releasesArray filteredArrayUsingPredicate:predicate];
     }
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"published_at" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"publishedAt" ascending:NO];
     releasesArray = [releasesArray sortedArrayUsingDescriptors:@[sortDescriptor]];
     _availableRelease = releasesArray.firstObject;
     if (_availableRelease != _currentRelease) {
@@ -149,6 +144,7 @@ NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseChe
             });
         }
     }
+
 }
 
 @end
