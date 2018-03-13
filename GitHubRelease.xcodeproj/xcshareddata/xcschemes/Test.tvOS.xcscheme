@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6D9F5ECB2057240600A984CC"
-               BuildableName = "Test.macOS.app"
-               BlueprintName = "Test.macOS"
+               BlueprintIdentifier = "6D9F5F392058499E00A984CC"
+               BuildableName = "Test.tvOS.app"
+               BlueprintName = "Test.tvOS"
                ReferencedContainer = "container:GitHubRelease.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,9 +33,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6D9F5ECB2057240600A984CC"
-            BuildableName = "Test.macOS.app"
-            BlueprintName = "Test.macOS"
+            BlueprintIdentifier = "6D9F5F392058499E00A984CC"
+            BuildableName = "Test.tvOS.app"
+            BlueprintName = "Test.tvOS"
             ReferencedContainer = "container:GitHubRelease.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -57,9 +57,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6D9F5ECB2057240600A984CC"
-            BuildableName = "Test.macOS.app"
-            BlueprintName = "Test.macOS"
+            BlueprintIdentifier = "6D9F5F392058499E00A984CC"
+            BuildableName = "Test.tvOS.app"
+            BlueprintName = "Test.tvOS"
             ReferencedContainer = "container:GitHubRelease.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -76,9 +76,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6D9F5ECB2057240600A984CC"
-            BuildableName = "Test.macOS.app"
-            BlueprintName = "Test.macOS"
+            BlueprintIdentifier = "6D9F5F392058499E00A984CC"
+            BuildableName = "Test.tvOS.app"
+            BlueprintName = "Test.tvOS"
             ReferencedContainer = "container:GitHubRelease.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
