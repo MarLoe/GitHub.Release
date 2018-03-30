@@ -28,19 +28,19 @@
     // Do any additional setup after loading the view.
     self.releaseChecker = [[MLGitHubReleaseChecker alloc] initWithUser:@"MarLoe" andProject:@"GitHub.Release"];
     _releaseChecker.delegate = self;
-    [_releaseChecker checkRelease:_version];
+    [_releaseChecker checkReleaseWithName:_version];
 }
 
 
 #pragma mark - GitHubReleaseCheckerDelegate
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(MLGitHubRelease*)releaseInfo
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender foundReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
-    NSLog(@"%@: %@", releaseName, releaseInfo);
+    NSLog(@"%@", releaseInfo);
 }
 
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
     NSString* repoUrl = releaseInfo.htmlURL;
     if (repoUrl.length == 0) {
@@ -49,7 +49,7 @@
     
     NSString* message = [NSString stringWithFormat:NSLocalizedString(@"Version %@ is available. You are currently running %@", -),
                          releaseInfo.name,
-                         releaseName
+                         sender.currentRelease.name
                          ];
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Update Available"
                                                                    message:message
@@ -62,9 +62,9 @@
 }
 
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker *)sender checkRelease:(NSString *)releaseName failedWithError:(NSError *)error
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker *)sender failedWithError:(NSError *)error
 {
-    NSLog(@"%@: %@", releaseName, error);
+    NSLog(@"%@", error);
 }
 
 @end

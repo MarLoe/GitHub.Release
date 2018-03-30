@@ -24,11 +24,11 @@ NS_ERROR_ENUM(GitHubReleaseCheckerErrorDomain)
 
 @protocol GitHubReleaseCheckerDelegate <NSObject>
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(MLGitHubRelease*)releaseInfo;
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender foundReleaseInfo:(MLGitHubRelease*)releaseInfo;
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo;
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo;
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName failedWithError:(NSError*)error;
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender failedWithError:(NSError*)error;
 
 @end
 
@@ -49,7 +49,8 @@ NS_ERROR_ENUM(GitHubReleaseCheckerErrorDomain)
 
 - (instancetype)initWithUser:(NSString*)user andProject:(NSString*)project;
 
-- (void)checkRelease:(NSString*)releaseName;
+- (void)checkReleaseWithName:(NSString*)releaseName;
+- (void)checkReleaseWithPredicate:(NSPredicate*)predicate;
 
 - (void)downloadAssetNamed:(NSString*)assetName;
 

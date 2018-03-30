@@ -22,7 +22,7 @@
 
     self.releaseChecker = [[MLGitHubReleaseChecker alloc] initWithUser:@"MarLoe" andProject:@"GitHub.Release"];
     _releaseChecker.delegate = self;
-    [_releaseChecker checkRelease:_version];
+    [_releaseChecker checkReleaseWithName:_version];
 }
 
 
@@ -36,13 +36,13 @@
 
 #pragma mark - GitHubReleaseCheckerDelegate
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundReleaseInfo:(MLGitHubRelease*)releaseInfo
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender foundReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
     NSLog(@"%@", releaseInfo);
 }
 
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender checkRelease:(NSString*)releaseName foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     if ([[userDefaults stringForKey:@"skip"] isEqualToString:releaseInfo.name]) {
@@ -61,7 +61,7 @@
     alert.messageText = NSLocalizedString(@"A new version is available", -);
     alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"Version %@ is available. You are currently running %@", -),
                              releaseInfo.name,
-                             releaseName
+                             sender.currentRelease.name
                              ];
     [alert addButtonWithTitle:NSLocalizedString(@"View", -)];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", -)].tag = NSModalResponseCancel;
@@ -81,7 +81,7 @@
 }
 
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker *)sender checkRelease:(NSString *)releaseName failedWithError:(NSError *)error
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker *)sender failedWithError:(NSError *)error
 {
     NSLog(@"%@", error);
 }
