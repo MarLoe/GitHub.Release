@@ -35,6 +35,12 @@
 		6D9F5F492058499E00A984CC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D9F5F482058499E00A984CC /* main.m */; };
 		6D9F5F5020584CBD00A984CC /* GitHubRelease.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9F5E50204F434100A984CC /* GitHubRelease.framework */; };
 		6D9F5F5120584CF500A984CC /* GitHubRelease.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9F5E50204F434100A984CC /* GitHubRelease.framework */; };
+		6DB72708206EC9BC00D8786E /* MLGitHubObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DB72706206EC9BC00D8786E /* MLGitHubObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6DB72709206EC9BC00D8786E /* MLGitHubObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB72707206EC9BC00D8786E /* MLGitHubObject.m */; };
+		6DB7270C206ECC8600D8786E /* MLGitHubPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DB7270A206ECC8600D8786E /* MLGitHubPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		6DB7270D206ECC8600D8786E /* MLGitHubPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB7270B206ECC8600D8786E /* MLGitHubPrivate.m */; };
+		6DB72711206EEF9A00D8786E /* MLGitHubError.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DB7270F206EEF9900D8786E /* MLGitHubError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6DB72712206EEF9A00D8786E /* MLGitHubError.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB72710206EEF9A00D8786E /* MLGitHubError.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +86,12 @@
 		6D9F5F452058499E00A984CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6D9F5F472058499E00A984CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D9F5F482058499E00A984CC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		6DB72706206EC9BC00D8786E /* MLGitHubObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MLGitHubObject.h; sourceTree = "<group>"; };
+		6DB72707206EC9BC00D8786E /* MLGitHubObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MLGitHubObject.m; sourceTree = "<group>"; };
+		6DB7270A206ECC8600D8786E /* MLGitHubPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MLGitHubPrivate.h; sourceTree = "<group>"; };
+		6DB7270B206ECC8600D8786E /* MLGitHubPrivate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MLGitHubPrivate.m; sourceTree = "<group>"; };
+		6DB7270F206EEF9900D8786E /* MLGitHubError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MLGitHubError.h; sourceTree = "<group>"; };
+		6DB72710206EEF9A00D8786E /* MLGitHubError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MLGitHubError.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,7 +181,12 @@
 		6D9F5E52204F434100A984CC /* GitHubRelease */ = {
 			isa = PBXGroup;
 			children = (
+				6DB7270E206ECD2400D8786E /* Private */,
 				6D9F5E53204F434100A984CC /* GitHubRelease.h */,
+				6DB7270F206EEF9900D8786E /* MLGitHubError.h */,
+				6DB72710206EEF9A00D8786E /* MLGitHubError.m */,
+				6DB72706206EC9BC00D8786E /* MLGitHubObject.h */,
+				6DB72707206EC9BC00D8786E /* MLGitHubObject.m */,
 				6D3A86CA206D90430081B562 /* MLGitHubRelease.h */,
 				6D622A6520588F4700C35903 /* MLGitHubRelease.m */,
 				6D3A86C6206D77940081B562 /* MLGitHubAsset.h */,
@@ -221,6 +238,15 @@
 			path = tvOS;
 			sourceTree = "<group>";
 		};
+		6DB7270E206ECD2400D8786E /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				6DB7270A206ECC8600D8786E /* MLGitHubPrivate.h */,
+				6DB7270B206ECC8600D8786E /* MLGitHubPrivate.m */,
+			);
+			path = Private;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -229,9 +255,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D9F5E55204F434200A984CC /* GitHubRelease.h in Headers */,
+				6DB72708206EC9BC00D8786E /* MLGitHubObject.h in Headers */,
+				6DB72711206EEF9A00D8786E /* MLGitHubError.h in Headers */,
 				6D3A86C8206D77940081B562 /* MLGitHubAsset.h in Headers */,
 				6D3A86CB206D90430081B562 /* MLGitHubRelease.h in Headers */,
 				6D39AA91205EC0EC004AEC4A /* MLGitHubUploader.h in Headers */,
+				6DB7270C206ECC8600D8786E /* MLGitHubPrivate.h in Headers */,
 				6D9F5E69204F439B00A984CC /* MLGitHubReleaseChecker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,9 +444,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DB72709206EC9BC00D8786E /* MLGitHubObject.m in Sources */,
 				6D3A86C9206D77940081B562 /* MLGitHubAsset.m in Sources */,
 				6D9F5E6A204F439B00A984CC /* MLGitHubReleaseChecker.m in Sources */,
+				6DB7270D206ECC8600D8786E /* MLGitHubPrivate.m in Sources */,
 				6D622A6720588F4700C35903 /* MLGitHubRelease.m in Sources */,
+				6DB72712206EEF9A00D8786E /* MLGitHubError.m in Sources */,
 				6D39AA92205EC0EC004AEC4A /* MLGitHubUploader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

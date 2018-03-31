@@ -8,31 +8,40 @@
 
 #import "MLGitHubAsset.h"
 #import "MLGitHubUploader.h"
+#import "MLGitHubPrivate.h"
+
 
 @implementation MLGitHubAsset
-+ (NSDictionary<NSString *, NSString *> *)properties
+
+- (NSDictionary<NSString *, NSString *> *)properties
 {
     static NSDictionary<NSString *, NSString *> *properties;
-    return properties = properties ? properties : @{
-                                                    @"url": @"url",
-                                                    @"id": @"identifier",
-                                                    @"name": @"name",
-                                                    @"label": @"label",
-                                                    @"uploader": @"uploader",
-                                                    @"content_type": @"contentType",
-                                                    @"state": @"state",
-                                                    @"size": @"size",
-                                                    @"download_count": @"downloadCount",
-                                                    @"created_at": @"createdAt",
-                                                    @"updated_at": @"updatedAt",
-                                                    @"browser_download_url": @"browserDownloadURL",
-                                                    };
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        properties = @{
+                       @"url":                  @"url",
+                       @"id":                   @"identifier",
+                       @"name":                 @"name",
+                       @"label":                @"label",
+                       @"uploader":             @"uploader",
+                       @"content_type":         @"contentType",
+                       @"state":                @"state",
+                       @"size":                 @"size",
+                       @"download_count":       @"downloadCount",
+                       @"created_at":           @"createdAt",
+                       @"updated_at":           @"updatedAt",
+                       @"browser_download_url": @"browserDownloadURL",
+                       };
+    });
+    return properties;
 }
+
 
 + (instancetype)fromJSONDictionary:(NSDictionary *)dict
 {
     return dict ? [[MLGitHubAsset alloc] initWithJSONDictionary:dict] : nil;
 }
+
 
 - (instancetype)initWithJSONDictionary:(NSDictionary *)dict
 {
@@ -42,11 +51,5 @@
     }
     return self;
 }
-
-- (void)setValue:(nullable id)value forKey:(NSString *)key
-{
-    [super setValue:value forKey:MLGitHubAsset.properties[key]];
-}
-
 
 @end

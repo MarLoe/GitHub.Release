@@ -42,8 +42,7 @@
 
 - (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
-    NSString* repoUrl = releaseInfo.htmlURL;
-    if (repoUrl.length == 0) {
+    if (releaseInfo.htmlURL == nil) {
         return;
     }
     

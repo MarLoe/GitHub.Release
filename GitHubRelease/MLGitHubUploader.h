@@ -7,28 +7,30 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MLGitHubObject.h"
 
-@interface MLGitHubUploader : NSObject
-@property (nonatomic, nullable, copy)   NSString *login;
-@property (nonatomic, nullable, strong) NSNumber *identifier;
-@property (nonatomic, nullable, copy)   NSString *avatarURL;
-@property (nonatomic, nullable, copy)   NSString *gravatarID;
-@property (nonatomic, nullable, copy)   NSString *url;
-@property (nonatomic, nullable, copy)   NSString *htmlURL;
-@property (nonatomic, nullable, copy)   NSString *followersURL;
-@property (nonatomic, nullable, copy)   NSString *followingURL;
-@property (nonatomic, nullable, copy)   NSString *gistsURL;
-@property (nonatomic, nullable, copy)   NSString *starredURL;
-@property (nonatomic, nullable, copy)   NSString *subscriptionsURL;
-@property (nonatomic, nullable, copy)   NSString *organizationsURL;
-@property (nonatomic, nullable, copy)   NSString *reposURL;
-@property (nonatomic, nullable, copy)   NSString *eventsURL;
-@property (nonatomic, nullable, copy)   NSString *receivedEventsURL;
-@property (nonatomic, nullable, copy)   NSString *type;
-@property (nonatomic, nullable, strong) NSNumber *siteAdmin;
+
+@interface MLGitHubUploader : MLGitHubObject
+
+@property (nonatomic, nullable, copy)   NSString*       login;
+@property (nonatomic, nullable, strong) NSNumber*       identifier;
+@property (nonatomic, nullable, copy)   NSURL*          avatarURL;
+@property (nonatomic, nullable, copy)   NSString*       gravatarID;
+@property (nonatomic, nullable, copy)   NSURL*          url;
+@property (nonatomic, nullable, copy)   NSURL*          htmlURL;
+@property (nonatomic, nullable, copy)   NSURL*          followersURL;
+@property (nonatomic, nullable, copy)   NSURL*          followingURL;
+@property (nonatomic, nullable, copy)   NSURL*          gistsURL;
+@property (nonatomic, nullable, copy)   NSURL*          starredURL;
+@property (nonatomic, nullable, copy)   NSURL*          subscriptionsURL;
+@property (nonatomic, nullable, copy)   NSURL*          organizationsURL;
+@property (nonatomic, nullable, copy)   NSURL*          reposURL;
+@property (nonatomic, nullable, copy)   NSURL*          eventsURL;
+@property (nonatomic, nullable, copy)   NSURL*          receivedEventsURL;
+@property (nonatomic, nullable, copy)   NSString*       type;
+@property (nonatomic, nullable, strong) NSNumber*       siteAdmin;
+
 @end
 
-@interface MLGitHubUploader (JSONConversion)
-+ (instancetype _Nullable )fromJSONDictionary:(NSDictionary *_Nonnull)dict;
-@end
+
 

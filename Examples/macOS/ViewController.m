@@ -38,7 +38,7 @@
 
 - (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender foundReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
-    NSLog(@"%@", releaseInfo);
+    NSLog(@"%@", releaseInfo.url.absoluteString);
 }
 
 
@@ -50,8 +50,7 @@
         return;
     }
 
-    NSString* repoUrl = releaseInfo.htmlURL;
-    if (repoUrl.length == 0) {
+    if (releaseInfo.htmlURL == nil) {
         return;
     }
 
@@ -76,7 +75,7 @@
             return;
         }
         
-        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:repoUrl]];
+        [[NSWorkspace sharedWorkspace] openURL:releaseInfo.htmlURL];
     }];
 }
 

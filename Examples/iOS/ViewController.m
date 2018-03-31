@@ -42,8 +42,7 @@
 
 - (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender foundNewReleaseInfo:(MLGitHubRelease*)releaseInfo
 {
-    NSString* repoUrl = releaseInfo.htmlURL;
-    if (repoUrl.length == 0) {
+    if (releaseInfo.htmlURL == nil) {
         return;
     }
     
@@ -56,7 +55,7 @@
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:@"View" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:repoUrl] options:@{} completionHandler:nil];
+        [[UIApplication sharedApplication] openURL:releaseInfo.htmlURL options:@{} completionHandler:nil];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
 }

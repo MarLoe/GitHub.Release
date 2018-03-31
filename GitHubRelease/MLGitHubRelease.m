@@ -1,23 +1,23 @@
-
-// MLGitHubRelease.m
+//
+//  MLGitHubRelease.m
+//  GitHubRelease
+//
+//  Created by Martin Løbger on 29/03/2018.
+//  Copyright © 2018 Martin Løbger. All rights reserved.
+//
 
 #import "MLGitHubRelease.h"
+#import "MLGitHubObject.h"
 #import "MLGitHubAsset.h"
 #import "MLGitHubUploader.h"
+#import "MLGitHubPrivate.h"
+
 
 // Shorthand for simple blocks
 #define λ(decl, expr) (^(decl) { return (expr); })
 
 
-NS_ASSUME_NONNULL_BEGIN
-
 #pragma mark - Private model interfaces
-
-@interface MLGitHubRelease (JSONConversion)
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict;
-- (NSDictionary *)JSONDictionary;
-@end
-
 
 
 static id map(id collection, id (^f)(id value)) {
@@ -32,6 +32,7 @@ static id map(id collection, id (^f)(id value)) {
     return result;
 }
 
+
 #pragma mark - JSON serialization
 
 MLGitHubReleases *_Nullable MLGitHubReleaseFromData(NSData *data, NSErrorRef* error)
@@ -45,59 +46,50 @@ MLGitHubReleases *_Nullable MLGitHubReleaseFromData(NSData *data, NSErrorRef* er
     }
 }
 
+
 MLGitHubReleases *_Nullable MLGitHubReleaseFromJSON(NSString *json, NSStringEncoding encoding, NSErrorRef* error)
 {
     return MLGitHubReleaseFromData([json dataUsingEncoding:encoding], error);
 }
 
-NSData *_Nullable MLGitHubReleaseToData(MLGitHubReleases *release, NSError **error)
-{
-    @try {
-        id json = map(release, λ(id x, [x JSONDictionary]));
-        NSData *data = [NSJSONSerialization dataWithJSONObject:json options:kNilOptions error:error];
-        return *error ? nil : data;
-    } @catch (NSException *exception) {
-        *error = [NSError errorWithDomain:@"JSONSerialization" code:-1 userInfo:@{ @"exception": exception }];
-        return nil;
-    }
-}
-
-NSString *_Nullable MLGitHubReleaseToJSON(MLGitHubReleases *release, NSStringEncoding encoding, NSError **error)
-{
-    NSData *data = MLGitHubReleaseToData(release, error);
-    return data ? [[NSString alloc] initWithData:data encoding:encoding] : nil;
-}
 
 @implementation MLGitHubRelease
 
-+ (NSDictionary<NSString *, NSString *> *)properties
+- (NSDictionary<NSString *, NSString *> *)properties
 {
     static NSDictionary<NSString *, NSString *> *properties;
-    return properties = properties ? properties : @{
-                                                    @"url": @"url",
-                                                    @"assets_url": @"assetsURL",
-                                                    @"upload_url": @"uploadURL",
-                                                    @"html_url": @"htmlURL",
-                                                    @"id": @"identifier",
-                                                    @"tag_name": @"tagName",
-                                                    @"target_commitish": @"targetCommitish",
-                                                    @"name": @"name",
-                                                    @"draft": @"isDraft",
-                                                    @"author": @"author",
-                                                    @"prerelease": @"isPrerelease",
-                                                    @"created_at": @"createdAt",
-                                                    @"published_at": @"publishedAt",
-                                                    @"assets": @"assets",
-                                                    @"tarball_url": @"tarballURL",
-                                                    @"zipball_url": @"zipballURL",
-                                                    @"body": @"body",
-                                                    };
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        properties = @{
+                       @"url":                 @"url",
+                       @"assets_url":          @"assetsURL",
+                       @"upload_url":          @"uploadURL",
+                       @"html_url":            @"htmlURL",
+                       @"id":                  @"identifier",
+                       @"tag_name":            @"tagName",
+                       @"target_commitish":    @"targetCommitish",
+                       @"name":                @"name",
+                       @"draft":               @"isDraft",
+                       @"author":              @"author",
+                       @"prerelease":          @"isPrerelease",
+                       @"created_at":          @"createdAt",
+                       @"published_at":        @"publishedAt",
+                       @"assets":              @"assets",
+                       @"tarball_url":         @"tarballURL",
+                       @"zipball_url":         @"zipballURL",
+                       @"body":                @"body",
+                       };
+    });
+    return properties;
 }
+
 
 + (instancetype)fromJSONDictionary:(NSDictionary *)dict
 {
     return dict ? [[MLGitHubRelease alloc] initWithJSONDictionary:dict] : nil;
 }
+
 
 - (instancetype)initWithJSONDictionary:(NSDictionary *)dict
 {
@@ -109,14 +101,6 @@ NSString *_Nullable MLGitHubReleaseToJSON(MLGitHubReleases *release, NSStringEnc
     return self;
 }
 
-- (void)setValue:(nullable id)value forKey:(NSString *)key
-{
-    [super setValue:value forKey:MLGitHubRelease.properties[key]];
-}
+
 
 @end
-
-
-
-
-NS_ASSUME_NONNULL_END

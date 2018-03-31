@@ -7,15 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-
-FOUNDATION_EXPORT NSErrorDomain const GitHubReleaseCheckerErrorDomain;
-
-NS_ERROR_ENUM(GitHubReleaseCheckerErrorDomain)
-{
-    GitHubReleaseCheckerErrorUnknown            =   -1,
-    GitHubReleaseCheckerErrorNotFound           = -404,
-};
+#import "MLGitHubError.h"
 
 
 @class MLGitHubRelease;
@@ -50,8 +42,7 @@ NS_ERROR_ENUM(GitHubReleaseCheckerErrorDomain)
 - (instancetype)initWithUser:(NSString*)user andProject:(NSString*)project;
 
 - (void)checkReleaseWithName:(NSString*)releaseName;
-- (void)checkReleaseWithPredicate:(NSPredicate*)predicate;
 
-- (void)downloadAssetNamed:(NSString*)assetName;
+- (void)checkReleaseWithPredicate:(NSPredicate*)predicate;
 
 @end

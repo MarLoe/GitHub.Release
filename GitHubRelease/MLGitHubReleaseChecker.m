@@ -9,8 +9,6 @@
 #import "MLGitHubReleaseChecker.h"
 #import "MLGitHubRelease.h"
 
-NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseCheckerErrorDomain";
-
 @interface MLGitHubReleaseChecker (NSURLSessionDelegate) <NSURLSessionDelegate>
 @end
 
@@ -65,12 +63,6 @@ NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseChe
     }];
 
     [postDataTask resume];
-}
-
-
-- (void)downloadAssetNamed:(NSString*)assetName
-{
-    
 }
 
 
