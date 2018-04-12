@@ -106,7 +106,7 @@
     _currentRelease = [releasesArray filteredArrayUsingPredicate:predicate].firstObject;
     if (_currentRelease == nil) {
         if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:failedWithError:)]) {
-            NSString* localizedDescription = [NSString stringWithFormat:NSLocalizedString(@"Release was not found using predicate %@", -), predicate];
+            NSString* localizedDescription = [NSString stringWithFormat:NSLocalizedString(@"Release was not found using predicate: %@", -), predicate];
             error = [NSError errorWithDomain:GitHubReleaseCheckerErrorDomain code:GitHubReleaseCheckerErrorNotFound userInfo:@{ NSLocalizedDescriptionKey : localizedDescription }];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.delegate gitHubReleaseChecker:self failedWithError:error];

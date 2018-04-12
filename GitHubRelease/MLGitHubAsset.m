@@ -10,6 +10,9 @@
 #import "MLGitHubUploader.h"
 #import "MLGitHubPrivate.h"
 
+@interface MLGitHubAsset (NSURLSessionDelegate) <NSURLSessionDelegate>
+@end
+
 
 @implementation MLGitHubAsset
 
@@ -50,6 +53,21 @@
         _uploader = [MLGitHubUploader fromJSONDictionary:(id)_uploader];
     }
     return self;
+}
+
+- (void)downloadWithCompletionHandler:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler
+{
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:_browserDownloadURL
+                                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                                       timeoutInterval:60.0];
+
+    [request setHTTPMethod:@"GET"];
+    
+    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:completionHandler];
+    
+    [postDataTask resume];
 }
 
 @end

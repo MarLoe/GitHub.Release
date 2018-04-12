@@ -30,6 +30,8 @@ typedef NSArray<MLGitHubAsset *> MLGitHubAssets;
 @property (nonatomic, nullable, copy)   NSDate*             updatedAt;
 @property (nonatomic, nullable, copy)   NSURL*              browserDownloadURL;
 
+- (void)downloadWithCompletionHandler:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler;
+
 @end
 
 
