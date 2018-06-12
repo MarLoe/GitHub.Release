@@ -40,17 +40,24 @@
 }
 
 
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict
++ (instancetype)fromJSONDictionary:(NSDictionary *)dict error:(NSError **)error
 {
-    return dict ? [[MLGitHubAsset alloc] initWithJSONDictionary:dict] : nil;
+    return dict ? [[MLGitHubAsset alloc] initWithJSONDictionary:dict error:error] : nil;
 }
 
 
-- (instancetype)initWithJSONDictionary:(NSDictionary *)dict
+- (instancetype)initWithJSONDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)error
 {
-    if (self = [super init]) {
-        [self setValuesForKeysWithDictionary:dict];
-        _uploader = [MLGitHubUploader fromJSONDictionary:(id)_uploader];
+    if (self = [super initWithJSONDictionary:dict error:error]) {
+        @try {
+            _uploader = [MLGitHubUploader fromJSONDictionary:(id)_uploader error:error];
+        }
+        @catch (NSError* e) {
+            if (error != nil) {
+                *error = e;
+            }
+            return nil;
+        }
     }
     return self;
 }

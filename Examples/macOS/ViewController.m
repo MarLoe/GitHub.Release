@@ -100,6 +100,7 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
 - (void)gitHubReleaseChecker:(MLGitHubReleaseChecker *)sender failedWithError:(NSError *)error
 {
     NSLog(@"%@", error);
+    [[NSAlert alertWithError:error] runModal];
 }
 
 @end

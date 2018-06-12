@@ -74,6 +74,11 @@
 - (void)gitHubReleaseChecker:(MLGitHubReleaseChecker *)sender failedWithError:(NSError *)error
 {
     NSLog(@"%@", error);
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:error.localizedDescription
+                                                                   message:error.localizedRecoverySuggestion
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

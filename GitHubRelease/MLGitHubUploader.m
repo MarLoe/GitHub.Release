@@ -7,6 +7,7 @@
 //
 
 #import "MLGitHubUploader.h"
+#import "MLGitHubPrivate.h"
 
 @implementation MLGitHubUploader
 
@@ -40,16 +41,15 @@
 }
 
 
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict
++ (instancetype)fromJSONDictionary:(NSDictionary *)dict error:(NSError **)error
 {
-    return dict ? [[MLGitHubUploader alloc] initWithJSONDictionary:dict] : nil;
+    return dict ? [[MLGitHubUploader alloc] initWithJSONDictionary:dict error:error] : nil;
 }
 
 
-- (instancetype)initWithJSONDictionary:(NSDictionary *)dict
+- (instancetype)initWithJSONDictionary:(NSDictionary *)dict error:(NSError **)error
 {
-    if (self = [super init]) {
-        [self setValuesForKeysWithDictionary:dict];
+    if (self = [super initWithJSONDictionary:dict error:error]) {
     }
     return self;
 }

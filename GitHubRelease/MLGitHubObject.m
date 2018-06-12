@@ -12,6 +12,23 @@
 
 @implementation MLGitHubObject
 
+- (instancetype)initWithJSONDictionary:(NSDictionary *)dict error:(NSError **)error
+{
+    if (self = [super init]) {
+        @try {
+            [self setValuesForKeysWithDictionary:dict];
+        }
+        @catch (NSError* e) {
+            if (error != nil) {
+                *error = e;
+            }
+            return nil;
+        }
+    }
+    return self;
+}
+
+
 - (NSDictionary<NSString *, NSString *> *)properties
 {
     NSAssert(NO, @"Please override properties");
@@ -21,14 +38,15 @@
 
 - (void)setValue:(nullable id)value forKey:(NSString *)key
 {
-    key = self.properties[key];
+    NSString* propertName = self.properties[key];
     
-    objc_property_t property = class_getProperty([self class], [key UTF8String]);
+    objc_property_t property = class_getProperty([self class], propertName.UTF8String);
     if (property == NULL) {
         @throw [NSError errorWithDomain:GitHubReleaseCheckerErrorDomain
                                    code:GitHubReleaseCheckerErrorUnknownProperty
                                userInfo:@{
-                                          NSLocalizedDescriptionKey: @"Unknown property"
+                                          NSLocalizedDescriptionKey: @"Error loading GitHub information",
+                                          NSLocalizedRecoverySuggestionErrorKey: [NSString stringWithFormat:@"Unknown property: %@.%@", NSStringFromClass([self class]), key],
                                           }];
     }
     const char * type = property_getAttributes(property);
@@ -41,7 +59,7 @@
         value = [dateFormatter dateFromString:value];
     }
     
-    [super setValue:value forKey:key];
+    [super setValue:value forKey:propertName];
 }
 
 @end
