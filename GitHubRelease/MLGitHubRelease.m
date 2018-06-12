@@ -126,5 +126,9 @@ MLGitHubReleases *_Nullable MLGitHubReleaseFromJSON(NSString *json, NSStringEnco
 }
 
 
+- (NSString*)description
+{
+    return [NSString stringWithFormat:@"%@ - %@", [super description], _name];
+}
 
 @end

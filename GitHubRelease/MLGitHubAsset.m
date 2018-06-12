@@ -75,4 +75,10 @@
     [postDataTask resume];
 }
 
+
+- (NSString*)description
+{
+    return [NSString stringWithFormat:@"%@ - %@", [super description], _name];
+}
+
 @end

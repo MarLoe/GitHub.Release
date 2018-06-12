@@ -92,7 +92,6 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
             default:
                 break;
         }
-        
     }];
 }
 

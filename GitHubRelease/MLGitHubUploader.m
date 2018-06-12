@@ -52,4 +52,10 @@
     return self;
 }
 
+
+- (NSString*)description
+{
+    return [NSString stringWithFormat:@"%@ - %@", [super description], _login];
+}
+
 @end
