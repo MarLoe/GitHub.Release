@@ -17,8 +17,6 @@ typedef NSArray<MLGitHubAsset *> MLGitHubAssets;
 
 @interface MLGitHubAsset : MLGitHubObject
 
-@property (nonatomic, nullable, copy)   NSURL*              url;
-@property (nonatomic, assign)           NSInteger           identifier;
 @property (nonatomic, nullable, copy)   NSString*           name;
 @property (nonatomic, nullable, copy)   NSString*           label;
 @property (nonatomic, nullable, strong) MLGitHubUploader*   uploader;

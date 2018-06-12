@@ -13,10 +13,8 @@
 @interface MLGitHubUploader : MLGitHubObject
 
 @property (nonatomic, nullable, copy)   NSString*       login;
-@property (nonatomic, nullable, strong) NSNumber*       identifier;
 @property (nonatomic, nullable, copy)   NSURL*          avatarURL;
 @property (nonatomic, nullable, copy)   NSString*       gravatarID;
-@property (nonatomic, nullable, copy)   NSURL*          url;
 @property (nonatomic, nullable, copy)   NSURL*          htmlURL;
 @property (nonatomic, nullable, copy)   NSURL*          followersURL;
 @property (nonatomic, nullable, copy)   NSURL*          followingURL;

@@ -17,12 +17,10 @@
     static NSDictionary<NSString *, NSString *> *properties;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        properties = @{
+        properties = [super propertiesWithDictionary:@{
                        @"login":                @"login",
-                       @"id":                   @"identifier",
                        @"avatar_url":           @"avatarURL",
                        @"gravatar_id":          @"gravatarID",
-                       @"url":                  @"url",
                        @"html_url":             @"htmlURL",
                        @"followers_url":        @"followersURL",
                        @"following_url":        @"followingURL",
@@ -35,7 +33,7 @@
                        @"received_events_url":  @"receivedEventsURL",
                        @"type":                 @"type",
                        @"site_admin":           @"siteAdmin",
-                       };
+                       }];
     });
     return properties;
 }

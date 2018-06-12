@@ -10,4 +10,8 @@
 
 @interface MLGitHubObject : NSObject
 
+@property (nonatomic, nullable, strong) NSNumber*                   identifier;
+@property (nonatomic, nullable, copy)   NSString*                   nodeId;
+@property (nonatomic, nullable, copy)   NSURL*                      url;
+
 @end

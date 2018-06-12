@@ -31,9 +31,21 @@
 
 - (NSDictionary<NSString *, NSString *> *)properties
 {
-    NSAssert(NO, @"Please override properties");
-    return nil;
+    NSLog(@"ERROR: Please override properties");
+    return [self propertiesWithDictionary:nil];
 }
+
+- (NSDictionary<NSString *, NSString *> *)propertiesWithDictionary:(NSDictionary*)dictionary
+{
+    NSMutableDictionary* mutableProperties = @{
+                                               @"id":                   @"identifier",
+                                               @"node_id":              @"nodeId",
+                                               @"url":                  @"url",
+                                               }.mutableCopy;
+    [mutableProperties addEntriesFromDictionary:dictionary];
+    return [mutableProperties copy];
+}
+
 
 
 - (void)setValue:(nullable id)value forKey:(NSString *)key

@@ -14,6 +14,7 @@
 @interface MLGitHubObject (JSONConversion)
 + (instancetype)fromJSONDictionary:(NSDictionary *)dict error:(NSError **)error;
 - (instancetype)initWithJSONDictionary:(NSDictionary *)dict error:(NSError **)error;
+- (NSDictionary<NSString *, NSString *> *)propertiesWithDictionary:(NSDictionary*)dictionary;
 @end
 
 

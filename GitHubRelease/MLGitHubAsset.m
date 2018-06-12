@@ -21,9 +21,7 @@
     static NSDictionary<NSString *, NSString *> *properties;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        properties = @{
-                       @"url":                  @"url",
-                       @"id":                   @"identifier",
+        properties = [super propertiesWithDictionary:@{
                        @"name":                 @"name",
                        @"label":                @"label",
                        @"uploader":             @"uploader",
@@ -34,7 +32,7 @@
                        @"created_at":           @"createdAt",
                        @"updated_at":           @"updatedAt",
                        @"browser_download_url": @"browserDownloadURL",
-                       };
+                       }];
     });
     return properties;
 }

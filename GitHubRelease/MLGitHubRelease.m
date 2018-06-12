@@ -79,25 +79,24 @@ MLGitHubReleases *_Nullable MLGitHubReleaseFromJSON(NSString *json, NSStringEnco
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        properties = @{
-                       @"url":                 @"url",
-                       @"assets_url":          @"assetsURL",
-                       @"upload_url":          @"uploadURL",
-                       @"html_url":            @"htmlURL",
-                       @"id":                  @"identifier",
-                       @"tag_name":            @"tagName",
-                       @"target_commitish":    @"targetCommitish",
-                       @"name":                @"name",
-                       @"draft":               @"isDraft",
-                       @"author":              @"author",
-                       @"prerelease":          @"isPrerelease",
-                       @"created_at":          @"createdAt",
-                       @"published_at":        @"publishedAt",
-                       @"assets":              @"assets",
-                       @"tarball_url":         @"tarballURL",
-                       @"zipball_url":         @"zipballURL",
-                       @"body":                @"body",
-                       };
+        properties = [super propertiesWithDictionary:@{
+                                                       @"assets_url":           @"assetsURL",
+                                                       @"upload_url":           @"uploadURL",
+                                                       @"html_url":             @"htmlURL",
+                                                       @"tag_name":             @"tagName",
+                                                       @"target_commitish":     @"targetCommitish",
+                                                       @"name":                 @"name",
+                                                       @"node_id":              @"nodeId",
+                                                       @"draft":                @"isDraft",
+                                                       @"author":               @"author",
+                                                       @"prerelease":           @"isPrerelease",
+                                                       @"created_at":           @"createdAt",
+                                                       @"published_at":         @"publishedAt",
+                                                       @"assets":               @"assets",
+                                                       @"tarball_url":          @"tarballURL",
+                                                       @"zipball_url":          @"zipballURL",
+                                                       @"body":                 @"body",
+                                                       }];
     });
     return properties;
 }
