@@ -1,4 +1,4 @@
-GitHub.Release
+![AppIcon](Examples/macOS/Assets.xcassets/AppIcon.appiconset/icon64.png) GitHub.Release
 ====
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/MarLoe/VMware.PreferencePane/blob/master/LICENSE)
