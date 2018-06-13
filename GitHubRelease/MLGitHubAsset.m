@@ -81,4 +81,17 @@
     return [NSString stringWithFormat:@"%@ - %@", [super description], _name];
 }
 
+
+#pragma mark - NSURLSessionDownloadDelegate
+
+- (void)URLSession:(NSURLSession *)session
+      downloadTask:(NSURLSessionDownloadTask *)downloadTask
+      didWriteData:(int64_t)bytesWritten
+ totalBytesWritten:(int64_t)totalBytesWritten
+totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+    float prog = (float)totalBytesWritten/totalBytesExpectedToWrite;
+    NSLog(@"downloaded %d%%", (int)(100.0*prog));
+}
+
 @end
