@@ -9,7 +9,7 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-
+@property (weak) IBOutlet UIImageView *imageView;
 @end
 
 @implementation ViewController
@@ -66,6 +66,13 @@
             [asset downloadWithCompletionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                 // TODO: Handle asset and do what needs to be done
                 NSLog(@"%@", error ?: location);
+                
+                // The "location" file must be handled before exiting this block.
+                // Once exited, the file will be deleted.
+                UIImage* image = [UIImage imageWithContentsOfFile:location.path];
+                [self.imageView performSelectorOnMainThread:@selector(setImage:)
+                                                 withObject:image
+                                              waitUntilDone:YES]; // <- We will wait as the image might be lazy loaded and then the "location" is gone
             }];
         }]];
     }
@@ -88,8 +95,8 @@
 
 - (BOOL)gitHubAsset:(MLGitHubAsset*)asset totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    float prog = (float)totalBytesWritten/totalBytesExpectedToWrite;
-    NSLog(@"downloaded %d%%", (int)(100.0*prog));
+    float progress = (float)totalBytesWritten / totalBytesExpectedToWrite;
+    NSLog(@"downloaded %d%%", (int)(100.0 * progress));
     return YES; // Continue download
 }
 

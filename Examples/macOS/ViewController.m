@@ -11,6 +11,10 @@
 static const NSModalResponse NSModalResponseView        = 1001;
 static const NSModalResponse NSModalResponseDownload    = 1002;
 
+@interface ViewController()
+@property (weak) IBOutlet NSImageView *imageView;
+@end
+
 @implementation ViewController
 
 - (void)viewDidLoad
@@ -22,7 +26,7 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
     _version = [prefPaneBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     // Try setting _version to something old
     _version = @"0.1.0";
-
+    
     self.releaseChecker = [[MLGitHubReleaseChecker alloc] initWithUser:@"MarLoe" andProject:@"GitHub.Release"];
     _releaseChecker.delegate = self;
     [_releaseChecker checkReleaseWithName:_version];
@@ -32,7 +36,7 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
 - (void)setRepresentedObject:(id)representedObject
 {
     [super setRepresentedObject:representedObject];
-
+    
     // Update the view, if already loaded.
 }
 
@@ -52,14 +56,14 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
         // The user has opted out of more alerts regarding this version.
         return;
     }
-
+    
     if (releaseInfo.htmlURL == nil) {
         return;
     }
     
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"name == %@", @"Asset.png"];
     MLGitHubAsset* asset = [releaseInfo.assets filteredArrayUsingPredicate:predicate].firstObject;
-
+    
     NSAlert* alert = [[NSAlert alloc] init];
     alert.alertStyle = NSAlertStyleWarning;
     alert.showsSuppressionButton = YES; // Uses default checkbox title
@@ -76,7 +80,7 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
     
     [alert beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
         if (alert.suppressionButton.state == NSOnState) {
-            // Suppress this alert from now on
+            // Suppress this alert from now on (for this release only)
             [userDefaults setObject:releaseInfo.name forKey:@"skip"];
         }
         
@@ -89,9 +93,14 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
                 [asset downloadWithCompletionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                     // TODO: Handle asset and do what needs to be done
                     NSLog(@"%@", error ?: location);
+                    
+                    // The "location" file must be handled before exiting this block.
+                    // Once exited, the file will be deleted.
+                    NSImage* image = [[NSImage alloc] initWithContentsOfURL:location];
+                    [self.imageView performSelectorOnMainThread:@selector(setImage:)
+                                                     withObject:image
+                                                  waitUntilDone:YES]; // <- We will wait as the image might be lazy loaded and then the "location" is gone
                 }];
-                break;
-            default:
                 break;
         }
     }];
@@ -109,8 +118,8 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
 
 - (BOOL)gitHubAsset:(MLGitHubAsset*)asset totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    float prog = (float)totalBytesWritten/totalBytesExpectedToWrite;
-    NSLog(@"downloaded %d%%", (int)(100.0*prog));
+    float progress = (float)totalBytesWritten / totalBytesExpectedToWrite;
+    NSLog(@"downloaded %d%%", (int)(100.0 * progress));
     return YES; // Continue download
 }
 
