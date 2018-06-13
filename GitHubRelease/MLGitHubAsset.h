@@ -28,7 +28,12 @@ typedef NSArray<MLGitHubAsset *> MLGitHubAssets;
 @property (nonatomic, nullable, copy)   NSDate*             updatedAt;
 @property (nonatomic, nullable, copy)   NSURL*              browserDownloadURL;
 
-- (void)downloadWithCompletionHandler:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler;
+/**
+ @brief         Download the asset using NSURLSessionDownloadTask configured with the default NSURLSessionConfiguration configuration.
+ @discussion    The asset is downloaded to disk and can on success be found at "location" of the completionHandler.
+ @param         completionHandler Called on completion.
+ */
+- (void)downloadWithCompletionHandler:(void (^)(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler;
 
 @end
 

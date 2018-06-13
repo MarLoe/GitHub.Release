@@ -62,8 +62,9 @@
     }]];
     if (asset != nil) {
         [alert addAction:[UIAlertAction actionWithTitle:@"Download" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [asset downloadWithCompletionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                // TODO: Save asset and do what needs to be done
+            [asset downloadWithCompletionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                // TODO: Handle asset and do what needs to be done
+                NSLog(@"%@", error ?: location);
             }];
         }]];
     }
