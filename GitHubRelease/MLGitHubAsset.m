@@ -9,6 +9,7 @@
 #import "MLGitHubAsset.h"
 #import "MLGitHubUploader.h"
 #import "MLGitHubPrivate.h"
+#import <objc/runtime.h>
 
 @interface MLGitHubAsset (NSURLSessionDelegate) <NSURLSessionDownloadDelegate>
 @end
@@ -22,17 +23,17 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         properties = [super propertiesWithDictionary:@{
-                       @"name":                 @"name",
-                       @"label":                @"label",
-                       @"uploader":             @"uploader",
-                       @"content_type":         @"contentType",
-                       @"state":                @"state",
-                       @"size":                 @"size",
-                       @"download_count":       @"downloadCount",
-                       @"created_at":           @"createdAt",
-                       @"updated_at":           @"updatedAt",
-                       @"browser_download_url": @"browserDownloadURL",
-                       }];
+                                                       @"name":                 @"name",
+                                                       @"label":                @"label",
+                                                       @"uploader":             @"uploader",
+                                                       @"content_type":         @"contentType",
+                                                       @"state":                @"state",
+                                                       @"size":                 @"size",
+                                                       @"download_count":       @"downloadCount",
+                                                       @"created_at":           @"createdAt",
+                                                       @"updated_at":           @"updatedAt",
+                                                       @"browser_download_url": @"browserDownloadURL",
+                                                       }];
     });
     return properties;
 }
@@ -62,16 +63,15 @@
 
 - (void)downloadWithCompletionHandler:(void (^)(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler
 {
-    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];//backgroundSessionConfiguration:@"com.lobger.github.release"];
-//    NSURLSessionConfiguration *config = [NSURLSessionConfiguration backgroundSessionConfiguration:@"com.lobger.github.release"];
-//    config.allowsCellularAccess = NO;
-//    ... could set config.discretionary here ...
-
+    NSString* backgroundIdentifier = [NSString stringWithFormat:@"com.lobger.github.release.%@", self.nodeId ?: self.name];
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:backgroundIdentifier];
+    
     NSURLSession *session = [NSURLSession sessionWithConfiguration:config
                                                           delegate:self
-                                                     delegateQueue:nil];
-
-    NSURLSessionDownloadTask *task = [session downloadTaskWithURL:_browserDownloadURL completionHandler:completionHandler];
+                                                     delegateQueue:nil];    
+    objc_setAssociatedObject(session, @selector(completionBlock), completionHandler, OBJC_ASSOCIATION_RETAIN);
+    
+    NSURLSessionDownloadTask *task = [session downloadTaskWithURL:_browserDownloadURL];
     [task resume];
 }
 
@@ -95,6 +95,26 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
         if (!result) {
             [downloadTask cancel];
         }
+    }
+}
+
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
+{
+    void (^completionHandler)(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) = objc_getAssociatedObject(session, @selector(completionBlock));
+    if (completionHandler != nil) {
+        objc_setAssociatedObject(session, @selector(completionBlock), nil, OBJC_ASSOCIATION_RETAIN);
+        completionHandler(location, downloadTask.response, nil);
+    }
+}
+
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(nullable NSError *)error
+{
+    void (^completionHandler)(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) = objc_getAssociatedObject(session, @selector(completionBlock));
+    if (completionHandler != nil) {
+        objc_setAssociatedObject(session, @selector(completionBlock), nil, OBJC_ASSOCIATION_RETAIN);
+        completionHandler(nil, task.response, error);
     }
 }
 
