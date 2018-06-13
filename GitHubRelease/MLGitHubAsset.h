@@ -14,7 +14,8 @@
 
 typedef NSArray<MLGitHubAsset *> MLGitHubAssets;
 
-@protocol MLGitHubAssetDelegate
+@protocol MLGitHubAssetDelegate <NSObject>
+- (BOOL)gitHubAsset:(MLGitHubAsset*)asset totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite;
 @end
 
 @interface MLGitHubAsset : MLGitHubObject

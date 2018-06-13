@@ -14,7 +14,7 @@
 @class MLGitHubReleaseChecker;
 
 
-@protocol GitHubReleaseCheckerDelegate <NSObject>
+@protocol MLGitHubReleaseCheckerDelegate <NSObject>
 
 - (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender foundReleaseInfo:(MLGitHubRelease*)releaseInfo;
 
@@ -37,7 +37,7 @@
 @property (nonatomic, assign) BOOL includeDraft;
 @property (nonatomic, assign) BOOL includePrerelease;
 
-@property (nonatomic, weak) id<GitHubReleaseCheckerDelegate> delegate;
+@property (nonatomic, weak) id<MLGitHubReleaseCheckerDelegate> delegate;
 
 - (instancetype)initWithUser:(NSString*)user andProject:(NSString*)project;
 

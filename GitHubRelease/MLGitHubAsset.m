@@ -90,8 +90,12 @@
  totalBytesWritten:(int64_t)totalBytesWritten
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    float prog = (float)totalBytesWritten/totalBytesExpectedToWrite;
-    NSLog(@"downloaded %d%%", (int)(100.0*prog));
+    if ([_delegate respondsToSelector:@selector(gitHubAsset:totalBytesWritten:totalBytesExpectedToWrite:)]) {
+        BOOL result = [_delegate gitHubAsset:self totalBytesWritten:totalBytesWritten totalBytesExpectedToWrite:totalBytesExpectedToWrite];
+        if (!result) {
+            [downloadTask cancel];
+        }
+    }
 }
 
 @end

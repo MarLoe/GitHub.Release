@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GitHubRelease.h"
 
-@interface ViewController : UIViewController <GitHubReleaseCheckerDelegate>
+@interface ViewController : UIViewController <MLGitHubReleaseCheckerDelegate, MLGitHubAssetDelegate>
 
 @property (nonatomic, readonly) NSString* version;
 @property (nonatomic, strong) MLGitHubReleaseChecker* releaseChecker;

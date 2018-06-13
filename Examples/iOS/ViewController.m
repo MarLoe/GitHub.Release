@@ -62,6 +62,7 @@
     }]];
     if (asset != nil) {
         [alert addAction:[UIAlertAction actionWithTitle:@"Download" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            asset.delegate = self;
             [asset downloadWithCompletionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                 // TODO: Handle asset and do what needs to be done
                 NSLog(@"%@", error ?: location);
@@ -80,6 +81,16 @@
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+
+#pragma mark - MLGitHubAssetDelegate
+
+- (BOOL)gitHubAsset:(MLGitHubAsset*)asset totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+    float prog = (float)totalBytesWritten/totalBytesExpectedToWrite;
+    NSLog(@"downloaded %d%%", (int)(100.0*prog));
+    return YES; // Continue download
 }
 
 @end

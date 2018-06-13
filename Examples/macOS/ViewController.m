@@ -85,6 +85,7 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
                 [[NSWorkspace sharedWorkspace] openURL:releaseInfo.htmlURL];
                 break;
             case NSModalResponseDownload:
+                asset.delegate = self;
                 [asset downloadWithCompletionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                     // TODO: Handle asset and do what needs to be done
                     NSLog(@"%@", error ?: location);
@@ -101,6 +102,16 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
 {
     NSLog(@"%@", error);
     [[NSAlert alertWithError:error] runModal];
+}
+
+
+#pragma mark - MLGitHubAssetDelegate
+
+- (BOOL)gitHubAsset:(MLGitHubAsset*)asset totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+    float prog = (float)totalBytesWritten/totalBytesExpectedToWrite;
+    NSLog(@"downloaded %d%%", (int)(100.0*prog));
+    return YES; // Continue download
 }
 
 @end
