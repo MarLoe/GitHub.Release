@@ -10,7 +10,7 @@
 #import "MLGitHubUploader.h"
 #import "MLGitHubPrivate.h"
 
-@interface MLGitHubAsset (NSURLSessionDelegate) <NSURLSessionDelegate>
+@interface MLGitHubAsset (NSURLSessionDelegate) <NSURLSessionDownloadDelegate>
 @end
 
 
@@ -60,25 +60,42 @@
     return self;
 }
 
-- (void)downloadWithCompletionHandler:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler
+- (void)downloadWithCompletionHandler:(void (^)(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler
 {
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:_browserDownloadURL
-                                                           cachePolicy:NSURLRequestUseProtocolCachePolicy
-                                                       timeoutInterval:60.0];
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];//backgroundSessionConfiguration:@"com.lobger.github.release"];
+//    NSURLSessionConfiguration *config = [NSURLSessionConfiguration backgroundSessionConfiguration:@"com.lobger.github.release"];
+//    config.allowsCellularAccess = NO;
+//    ... could set config.discretionary here ...
 
-    [request setHTTPMethod:@"GET"];
-    
-    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:completionHandler];
-    
-    [postDataTask resume];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config
+                                                          delegate:self
+                                                     delegateQueue:nil];
+
+    NSURLSessionDownloadTask *task = [session downloadTaskWithURL:_browserDownloadURL completionHandler:completionHandler];
+    [task resume];
 }
 
 
 - (NSString*)description
 {
     return [NSString stringWithFormat:@"%@ - %@", [super description], _name];
+}
+
+
+#pragma mark - NSURLSessionDownloadDelegate
+
+- (void)URLSession:(NSURLSession *)session
+      downloadTask:(NSURLSessionDownloadTask *)downloadTask
+      didWriteData:(int64_t)bytesWritten
+ totalBytesWritten:(int64_t)totalBytesWritten
+totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+    if ([_delegate respondsToSelector:@selector(gitHubAsset:totalBytesWritten:totalBytesExpectedToWrite:)]) {
+        BOOL result = [_delegate gitHubAsset:self totalBytesWritten:totalBytesWritten totalBytesExpectedToWrite:totalBytesExpectedToWrite];
+        if (!result) {
+            [downloadTask cancel];
+        }
+    }
 }
 
 @end

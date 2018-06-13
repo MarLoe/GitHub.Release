@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "GitHubRelease.h"
 
-@interface ViewController : NSViewController <GitHubReleaseCheckerDelegate>
+@interface ViewController : NSViewController <MLGitHubReleaseCheckerDelegate, MLGitHubAssetDelegate>
 
 @property (nonatomic, readonly) NSString* version;
 @property (nonatomic, strong) MLGitHubReleaseChecker* releaseChecker;
