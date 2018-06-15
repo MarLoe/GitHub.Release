@@ -14,9 +14,9 @@
 
 typedef NSArray<MLGitHubAsset *> MLGitHubAssets;
 
-@protocol MLGitHubAssetDelegate <NSObject>
-- (BOOL)gitHubAsset:(MLGitHubAsset*)asset totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite;
-@end
+typedef void (^MLGitHubAssetProgressHandler) (NSURLResponse * _Nullable response, NSProgress* _Nullable progress);
+typedef void (^MLGitHubAssetCompletionHandler) (NSURLResponse * _Nullable response, NSProgress* _Nullable progress, NSURL * _Nullable location, NSError * _Nullable error);
+
 
 @interface MLGitHubAsset : MLGitHubObject
 
@@ -33,10 +33,6 @@ typedef NSArray<MLGitHubAsset *> MLGitHubAssets;
 @property (nonatomic, nullable, copy)   NSDate*                     updatedAt;
 @property (nonatomic, nullable, copy)   NSURL*                      browserDownloadURL;
 
-#pragma mark - MLGitHubAsset properties
-
-@property (nonatomic, nullable, weak)   id<MLGitHubAssetDelegate>   delegate;
-
 
 #pragma mark - MLGitHubAsset methods
 
@@ -46,7 +42,8 @@ typedef NSArray<MLGitHubAsset *> MLGitHubAssets;
  @remarks       Set the delegate of the asset to follow the download progress.
  @param         completionHandler Called on completion.
  */
-- (void)downloadWithCompletionHandler:(void (^)(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler;
+- (void)downloadWithProgressHandler:(MLGitHubAssetProgressHandler)progressHandler andCompletionHandler:(MLGitHubAssetCompletionHandler)completionHandler;
+//- (void)downloadWithCompletionHandler:(void (^)(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler;
 
 @end
 

@@ -9,7 +9,8 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-@property (weak) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIImageView*  imageView;
+@property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @end
 
 @implementation ViewController
@@ -57,22 +58,32 @@
                                                                    message:message
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"View" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:@"View" style:UIAlertActionStyleDefault handler:^(UIAlertAction* _Nonnull action) {
         // TODO: tvOS does not support opening a webpage
     }]];
     if (asset != nil) {
-        [alert addAction:[UIAlertAction actionWithTitle:@"Download" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            asset.delegate = self;
-            [asset downloadWithCompletionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                // TODO: Handle asset and do what needs to be done
+        [alert addAction:[UIAlertAction actionWithTitle:@"Download" style:UIAlertActionStyleDefault handler:^(UIAlertAction* _Nonnull action) {
+            self.progressView.progress = 0.0;
+            self.progressView.hidden = NO;
+            [asset downloadWithProgressHandler:^(NSURLResponse* _Nullable response, NSProgress* _Nullable progress) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSLog(@"Downloading %@: %lld / %lld (%i%%)",asset.name, progress.completedUnitCount, progress.totalUnitCount, (int)(100.0 * progress.fractionCompleted));
+                    self.progressView.progress = progress.fractionCompleted;
+                });
+            } andCompletionHandler:^(NSURLResponse* _Nullable response, NSProgress* _Nullable progress, NSURL* _Nullable location, NSError* _Nullable error) {
                 NSLog(@"%@", error ?: location);
                 
-                // The "location" file must be handled before exiting this block.
-                // Once exited, the file will be deleted.
-                UIImage* image = [UIImage imageWithContentsOfFile:location.path];
-                [self.imageView performSelectorOnMainThread:@selector(setImage:)
-                                                 withObject:image
-                                              waitUntilDone:YES]; // <- We will wait as the image might be lazy loaded and then the "location" is gone
+                // The "location" file must be handled before exiting this block, as it will then be removed.
+                // Loading image using [UIImage imageWithContentsOfFile:] will lazy load - and thus risk not having read the "location" file.
+                // So we load the data into memory instead.
+                NSData* imageData = [NSData dataWithContentsOfURL:location];
+                UIImage* image = [UIImage imageWithData:imageData];
+                
+                // Now we can safe dispatch to main queue to perform UI updates.
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.progressView.hidden = YES;
+                    self.imageView.image = image;
+                });
             }];
         }]];
     }
@@ -80,7 +91,7 @@
 }
 
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker *)sender failedWithError:(NSError *)error
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender failedWithError:(NSError*)error
 {
     NSLog(@"%@", error);
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:error.localizedDescription
@@ -88,16 +99,6 @@
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-
-#pragma mark - MLGitHubAssetDelegate
-
-- (BOOL)gitHubAsset:(MLGitHubAsset*)asset totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
-{
-    float progress = (float)totalBytesWritten / totalBytesExpectedToWrite;
-    NSLog(@"downloaded %d%%", (int)(100.0 * progress));
-    return YES; // Continue download
 }
 
 @end
