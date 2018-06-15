@@ -1,6 +1,6 @@
 # ![AppIcon](Examples/macOS/Assets.xcassets/AppIcon.appiconset/icon64.png) GitHub.Release
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/MarLoe/VMware.PreferencePane/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/MarLoe/GitHub.Release/blob/master/LICENSE)
 
 Check your GitHub repo for new releases from within your software.
 

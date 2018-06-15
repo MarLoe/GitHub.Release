@@ -1,6 +1,6 @@
 //
 //  GitHubReleaseChecker.m
-//  VMware
+//  GitHub.Release
 //
 //  Created by Martin Løbger on 04/03/2018.
 //  Copyright © 2018 ML-Consulting. All rights reserved.
@@ -11,8 +11,6 @@
 
 @interface MLGitHubReleaseChecker (NSURLSessionDelegate) <NSURLSessionDelegate>
 @end
-
-// curl -i https://api.github.com/repos/MarLoe/VMware.PreferencePane/releases
 
 @implementation MLGitHubReleaseChecker
 
