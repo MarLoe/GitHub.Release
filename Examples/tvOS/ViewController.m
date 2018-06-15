@@ -9,7 +9,7 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-@property (weak) IBOutlet UIImageView *imageView;
+@property (weak) IBOutlet UIImageView*  imageView;
 @end
 
 @implementation ViewController
@@ -57,13 +57,14 @@
                                                                    message:message
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"View" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:@"View" style:UIAlertActionStyleDefault handler:^(UIAlertAction* _Nonnull action) {
         // TODO: tvOS does not support opening a webpage
     }]];
     if (asset != nil) {
-        [alert addAction:[UIAlertAction actionWithTitle:@"Download" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            asset.delegate = self;
-            [asset downloadWithCompletionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"Download" style:UIAlertActionStyleDefault handler:^(UIAlertAction* _Nonnull action) {
+            [asset downloadWithProgressHandler:^(NSURLResponse* _Nullable response, NSProgress* _Nullable progress) {
+                
+            } andCompletionHandler:^(NSURLResponse* _Nullable response, NSProgress* _Nullable progress, NSURL* _Nullable location, NSError* _Nullable error) {
                 // TODO: Handle asset and do what needs to be done
                 NSLog(@"%@", error ?: location);
                 
@@ -80,7 +81,7 @@
 }
 
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker *)sender failedWithError:(NSError *)error
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender failedWithError:(NSError*)error
 {
     NSLog(@"%@", error);
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:error.localizedDescription
@@ -88,16 +89,6 @@
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-
-#pragma mark - MLGitHubAssetDelegate
-
-- (BOOL)gitHubAsset:(MLGitHubAsset*)asset totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
-{
-    float progress = (float)totalBytesWritten / totalBytesExpectedToWrite;
-    NSLog(@"downloaded %d%%", (int)(100.0 * progress));
-    return YES; // Continue download
 }
 
 @end

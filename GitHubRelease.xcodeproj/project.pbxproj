@@ -41,6 +41,8 @@
 		6DB7270D206ECC8600D8786E /* MLGitHubPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB7270B206ECC8600D8786E /* MLGitHubPrivate.m */; };
 		6DB72711206EEF9A00D8786E /* MLGitHubError.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DB7270F206EEF9900D8786E /* MLGitHubError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6DB72712206EEF9A00D8786E /* MLGitHubError.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB72710206EEF9A00D8786E /* MLGitHubError.m */; };
+		BBD15D6620D30D76000A94CB /* NSURLSession+Progress.h in Headers */ = {isa = PBXBuildFile; fileRef = BBD15D6420D30D76000A94CB /* NSURLSession+Progress.h */; };
+		BBD15D6720D30D76000A94CB /* NSURLSession+Progress.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD15D6520D30D76000A94CB /* NSURLSession+Progress.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +94,8 @@
 		6DB7270B206ECC8600D8786E /* MLGitHubPrivate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MLGitHubPrivate.m; sourceTree = "<group>"; };
 		6DB7270F206EEF9900D8786E /* MLGitHubError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MLGitHubError.h; sourceTree = "<group>"; };
 		6DB72710206EEF9A00D8786E /* MLGitHubError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MLGitHubError.m; sourceTree = "<group>"; };
+		BBD15D6420D30D76000A94CB /* NSURLSession+Progress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+Progress.h"; sourceTree = "<group>"; };
+		BBD15D6520D30D76000A94CB /* NSURLSession+Progress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSURLSession+Progress.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,6 +247,8 @@
 			children = (
 				6DB7270A206ECC8600D8786E /* MLGitHubPrivate.h */,
 				6DB7270B206ECC8600D8786E /* MLGitHubPrivate.m */,
+				BBD15D6420D30D76000A94CB /* NSURLSession+Progress.h */,
+				BBD15D6520D30D76000A94CB /* NSURLSession+Progress.m */,
 			);
 			path = Private;
 			sourceTree = "<group>";
@@ -254,6 +260,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBD15D6620D30D76000A94CB /* NSURLSession+Progress.h in Headers */,
 				6D9F5E55204F434200A984CC /* GitHubRelease.h in Headers */,
 				6DB72708206EC9BC00D8786E /* MLGitHubObject.h in Headers */,
 				6DB72711206EEF9A00D8786E /* MLGitHubError.h in Headers */,
@@ -446,6 +453,7 @@
 			files = (
 				6DB72709206EC9BC00D8786E /* MLGitHubObject.m in Sources */,
 				6D3A86C9206D77940081B562 /* MLGitHubAsset.m in Sources */,
+				BBD15D6720D30D76000A94CB /* NSURLSession+Progress.m in Sources */,
 				6D9F5E6A204F439B00A984CC /* MLGitHubReleaseChecker.m in Sources */,
 				6DB7270D206ECC8600D8786E /* MLGitHubPrivate.m in Sources */,
 				6D622A6720588F4700C35903 /* MLGitHubRelease.m in Sources */,

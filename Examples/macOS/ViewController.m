@@ -12,7 +12,7 @@ static const NSModalResponse NSModalResponseView        = 1001;
 static const NSModalResponse NSModalResponseDownload    = 1002;
 
 @interface ViewController()
-@property (weak) IBOutlet NSImageView *imageView;
+@property (weak) IBOutlet NSImageView*  imageView;
 @end
 
 @implementation ViewController
@@ -85,42 +85,85 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
         }
         
         switch (returnCode) {
-            case NSModalResponseView:
+            case NSModalResponseView: {
                 [[NSWorkspace sharedWorkspace] openURL:releaseInfo.htmlURL];
                 break;
-            case NSModalResponseDownload:
-                asset.delegate = self;
-                [asset downloadWithCompletionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                    // TODO: Handle asset and do what needs to be done
+            }
+            case NSModalResponseDownload: {
+                NSFileManager* fileManager = [NSFileManager defaultManager];
+                NSString* downloadFolder = NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES).firstObject;
+                NSURL* downloadUrl = [NSURL fileURLWithPathComponents:@[downloadFolder, asset.name]];
+                
+                // Find unique file name
+                for (int i = 1; [fileManager fileExistsAtPath:downloadUrl.path]; i++) {
+                    NSString* assetName = [[NSString stringWithFormat:@"%@ (%i)", [asset.name stringByDeletingPathExtension], i] stringByAppendingPathExtension:[asset.name pathExtension]];
+                    downloadUrl = [NSURL fileURLWithPathComponents:@[downloadFolder, assetName]];
+                }
+                // Create a placeholde until we are done downloading.
+                [fileManager createFileAtPath:downloadUrl.path contents:nil attributes:nil];
+                
+                [asset downloadWithProgressHandler:^(NSURLResponse* _Nullable response, NSProgress* _Nullable progress) {
+                    NSLog(@"Downloading %@: %lld / %lld (%i%%)",asset.name, progress.completedUnitCount, progress.totalUnitCount, (int)(100.0 * progress.fractionCompleted));
+                    if (progress.completedUnitCount == 0) {
+                        // This part will activate progress in "Downloads stack" in the dock
+                        progress.kind = NSProgressKindFile;
+                        [progress setUserInfoObject:NSProgressFileOperationKindDownloading forKey:NSProgressFileOperationKindKey];
+                        [progress setUserInfoObject:downloadUrl forKey:NSProgressFileURLKey];
+                        [progress publish];
+                    }
+                } andCompletionHandler:^(NSURLResponse* _Nullable response, NSProgress* _Nullable progress, NSURL* _Nullable location, NSError* _Nullable error) {
                     NSLog(@"%@", error ?: location);
+                    if (error == nil && [response isKindOfClass:NSHTTPURLResponse.class]) {
+                        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+                        if (httpResponse.statusCode != 200) {
+                            error = [NSError errorWithDomain:NSURLErrorDomain
+                                                        code:httpResponse.statusCode
+                                                    userInfo:@{
+                                                               NSLocalizedDescriptionKey : [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode]
+                                                               }];
+                        }
+                    }
                     
-                    // The "location" file must be handled before exiting this block.
-                    // Once exited, the file will be deleted.
-                    NSImage* image = [[NSImage alloc] initWithContentsOfURL:location];
-                    [self.imageView performSelectorOnMainThread:@selector(setImage:)
-                                                     withObject:image
-                                                  waitUntilDone:YES]; // <- We will wait as the image might be lazy loaded and then the "location" is gone
+                    if (error == nil && location!= nil) {
+                        [fileManager replaceItemAtURL:downloadUrl
+                                        withItemAtURL:location
+                                       backupItemName:nil
+                                              options:NSFileManagerItemReplacementUsingNewMetadataOnly
+                                     resultingItemURL:nil
+                                                error:&error];
+                    }
+                    
+                    if (error == nil) {
+                        // Make the "Downloads stack" bounce
+                        [[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.apple.DownloadFileFinished" object:downloadUrl.path];
+                        
+                        [self.imageView performSelectorOnMainThread:@selector(setImage:)
+                                                         withObject:[[NSImage alloc] initWithContentsOfURL:downloadUrl]
+                                                      waitUntilDone:NO];
+                    }
+                    
+                    if (error != nil) {
+                        // In case of error, remove our placeholder file.
+                        [fileManager removeItemAtURL:downloadUrl error:nil];
+                        [[NSAlert alertWithError:error] runModal];
+                    }
+                    
+                    [progress unpublish]; // End "Downloads stack" progress
                 }];
                 break;
+            }
+            default: {
+                break;
+            }
         }
     }];
 }
 
 
-- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker *)sender failedWithError:(NSError *)error
+- (void)gitHubReleaseChecker:(MLGitHubReleaseChecker*)sender failedWithError:(NSError*)error
 {
     NSLog(@"%@", error);
     [[NSAlert alertWithError:error] runModal];
-}
-
-
-#pragma mark - MLGitHubAssetDelegate
-
-- (BOOL)gitHubAsset:(MLGitHubAsset*)asset totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
-{
-    float progress = (float)totalBytesWritten / totalBytesExpectedToWrite;
-    NSLog(@"downloaded %d%%", (int)(100.0 * progress));
-    return YES; // Continue download
 }
 
 @end
