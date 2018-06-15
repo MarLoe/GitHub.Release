@@ -12,7 +12,7 @@ static const NSModalResponse NSModalResponseView        = 1001;
 static const NSModalResponse NSModalResponseDownload    = 1002;
 
 @interface ViewController()
-@property (weak) IBOutlet NSImageView*  imageView;
+@property (weak, nonatomic) IBOutlet NSImageView*  imageView;
 @end
 
 @implementation ViewController
