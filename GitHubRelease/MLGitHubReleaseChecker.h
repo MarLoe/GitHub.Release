@@ -1,6 +1,6 @@
 //
 //  GitHubReleaseChecker.h
-//  VMware
+//  GitHub.Release
 //
 //  Created by Martin Løbger on 04/03/2018.
 //  Copyright © 2018 ML-Consulting. All rights reserved.
