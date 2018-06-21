@@ -7,7 +7,6 @@
 //
 
 #import "MLGitHubReleaseChecker.h"
-#import "MLGitHubRelease.h"
 
 @interface MLGitHubReleaseChecker (NSURLSessionDelegate) <NSURLSessionDelegate>
 @end
@@ -35,31 +34,23 @@
 
 - (void)checkReleaseWithPredicate:(NSPredicate*)predicate
 {
+    _currentRelease = nil;
+    _availableRelease = nil;
+    _releases = nil;
+    
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:_url
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                        timeoutInterval:60.0];
-    
-    //[request addValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request addValue:@"application/vnd.github.v3+json" forHTTPHeaderField:@"Accept"];
-
     [request setHTTPMethod:@"GET"];
-
-//    [request setHTTPMethod:@"POST"];
-//
-//
-//    NSDictionary *mapData = [[NSDictionary alloc] initWithObjectsAndKeys: @"Value", @"Key",   nil];
-//
-//    NSData *postData = [NSJSONSerialization dataWithJSONObject:mapData options:0 error:&error];
-//
-//    [request setHTTPBody:postData];
     
     __weak MLGitHubReleaseChecker *weakSelf = self;
     NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         [weakSelf handleReposnseForPredicate:predicate data:data response:response error:error];
     }];
-
+    
     [postDataTask resume];
 }
 
@@ -91,7 +82,8 @@
         }
     }
     
-    MLGitHubReleases* releasesArray = MLGitHubReleaseFromData(data, &error);
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"publishedAt" ascending:NO];
+    MLGitHubReleases* releasesArray = [MLGitHubReleaseFromData(data, &error) sortedArrayUsingDescriptors:@[sortDescriptor]];
     if (error != nil) {
         if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:failedWithError:)]) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -112,7 +104,7 @@
         }
         return;
     }
-
+    
     if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:foundReleaseInfo:)]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.delegate gitHubReleaseChecker:self foundReleaseInfo:weakSelf.currentRelease];
@@ -129,9 +121,9 @@
         releasesArray = [releasesArray filteredArrayUsingPredicate:predicate];
     }
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"publishedAt" ascending:NO];
-    releasesArray = [releasesArray sortedArrayUsingDescriptors:@[sortDescriptor]];
-    _availableRelease = releasesArray.firstObject;
+    _releases = releasesArray;
+    
+    _availableRelease = _releases.firstObject;
     if (_availableRelease != _currentRelease) {
         // New release available
         if ([_delegate respondsToSelector:@selector(gitHubReleaseChecker:foundNewReleaseInfo:)]) {
@@ -140,7 +132,60 @@
             });
         }
     }
-
+    
 }
+
+
+- (NSString*)generateReleaseNoteFromRelease:(MLGitHubRelease*)fromRelease toRelease:(MLGitHubRelease*)toRelease
+{
+    return [[self generateReleaseNoteFromRelease:fromRelease
+                                       toRelease:toRelease
+                            withHeaderAttributes:nil andBodyAttributes:nil] string];
+}
+
+- (NSAttributedString*)generateReleaseNoteFromRelease:(MLGitHubRelease*)fromRelease toRelease:(MLGitHubRelease*)toRelease withHeaderAttributes:(NSDictionary<NSAttributedStringKey, id>*)headerAttributes andBodyAttributes:(NSDictionary<NSAttributedStringKey, id>*)bodyAttributes;
+{
+    NSUInteger fromIndex = [_releases indexOfObject:fromRelease];
+    if (fromIndex == NSNotFound) {
+        NSLog(@"ERROR: Release not found %@", fromRelease);
+        return nil;
+    }
+    
+    NSUInteger toIndex = [_releases indexOfObject:toRelease];
+    if (toIndex == NSNotFound) {
+        NSLog(@"ERROR: Release not found %@", toRelease);
+        return nil;
+    }
+    
+    NSEnumerationOptions enumOptions = NSEnumerationConcurrent;
+    if (fromIndex < toIndex) {
+        NSUInteger tmp = fromIndex;
+        fromIndex = toIndex;
+        toIndex = tmp;
+        enumOptions |= NSEnumerationReverse;
+    }
+    
+    
+    NSMutableAttributedString* result = [[NSMutableAttributedString alloc] init];
+    NSIndexSet* indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(toIndex, fromIndex - toIndex)];
+    
+    [result beginEditing];
+    NSAttributedString* newLine = [[NSAttributedString alloc] initWithString:@"\n"];
+    [_releases enumerateObjectsAtIndexes:indexSet options:enumOptions usingBlock:^(MLGitHubRelease * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (result.length > 0) {
+            [result appendAttributedString:newLine];
+            [result appendAttributedString:newLine];
+        }
+        
+        [result appendAttributedString:[[NSAttributedString alloc] initWithString:obj.name attributes:headerAttributes]];
+        [result appendAttributedString:newLine];
+        
+        [result appendAttributedString:[[NSAttributedString alloc] initWithString:obj.body attributes:bodyAttributes]];
+    }];
+    [result endEditing];
+    
+    return [result copy];
+}
+
 
 @end

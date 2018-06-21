@@ -25,7 +25,7 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
     NSBundle* prefPaneBundle = [NSBundle bundleForClass:self.class];
     _version = [prefPaneBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     // Try setting _version to something old
-    _version = @"0.1.0";
+    _version = @"0.3.0";
     
     self.releaseChecker = [[MLGitHubReleaseChecker alloc] initWithUser:@"MarLoe" andProject:@"GitHub.Release"];
     _releaseChecker.delegate = self;
@@ -72,6 +72,19 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
                              releaseInfo.name,
                              sender.currentRelease.name
                              ];
+
+    // Add accumulated release note to alert
+    NSDictionary<NSAttributedStringKey, id>* titleAttr = @{
+                                                           NSFontAttributeName : [NSFont boldSystemFontOfSize:14.0]
+                                                           };
+    NSTextField* releaseNoteTextField = [NSTextField labelWithAttributedString:[sender generateReleaseNoteFromRelease:sender.currentRelease toRelease:sender.availableRelease withHeaderAttributes:titleAttr andBodyAttributes:nil]];
+    NSScrollView* releaseNoteScrollView = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 300, 100)];
+    releaseNoteScrollView.hasVerticalScroller = YES;
+    releaseNoteScrollView.hasHorizontalScroller = YES;
+    releaseNoteScrollView.documentView = releaseNoteTextField;
+    alert.accessoryView = releaseNoteScrollView;
+
+    
     [alert addButtonWithTitle:NSLocalizedString(@"View", -)].tag = NSModalResponseView;
     if (asset != nil) {
         [alert addButtonWithTitle:NSLocalizedString(@"Download", -)].tag = NSModalResponseDownload;

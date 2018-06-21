@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "MLGitHubError.h"
+#import "MLGitHubRelease.h"
 
 
-@class MLGitHubRelease;
 @class MLGitHubReleaseChecker;
 
 
@@ -33,6 +33,7 @@
 
 @property (nonatomic, readonly) MLGitHubRelease* currentRelease;
 @property (nonatomic, readonly) MLGitHubRelease* availableRelease;
+@property (nonatomic, readonly) MLGitHubReleases* releases;
 
 @property (nonatomic, assign) BOOL includeDraft;
 @property (nonatomic, assign) BOOL includePrerelease;
@@ -44,5 +45,8 @@
 - (void)checkReleaseWithName:(NSString*)releaseName;
 
 - (void)checkReleaseWithPredicate:(NSPredicate*)predicate;
+
+- (NSString*)generateReleaseNoteFromRelease:(MLGitHubRelease*)fromRelease toRelease:(MLGitHubRelease*)toRelease;
+- (NSAttributedString*)generateReleaseNoteFromRelease:(MLGitHubRelease*)fromRelease toRelease:(MLGitHubRelease*)toRelease withHeaderAttributes:(NSDictionary<NSAttributedStringKey, id>*)headerAttributes andBodyAttributes:(NSDictionary<NSAttributedStringKey, id>*)bodyAttributes;
 
 @end
