@@ -12,25 +12,25 @@
 #import "MLGitHubUploader.h"
 
 @interface MLGitHubObject (JSONConversion)
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict error:(NSError **)error;
-- (instancetype)initWithJSONDictionary:(NSDictionary *)dict error:(NSError **)error;
-- (NSDictionary<NSString *, NSString *> *)propertiesWithDictionary:(NSDictionary*)dictionary;
++ (instancetype _Nullable)fromJSONDictionary:(NSDictionary *_Nonnull)dict error:(NSError *_Nullable*_Nullable)error;
+- (instancetype _Nullable)initWithJSONDictionary:(NSDictionary *_Nonnull)dict error:(NSError *_Nullable*_Nullable)error;
+- (NSDictionary<NSString *, NSString *> *_Nonnull)propertiesWithDictionary:(NSDictionary*_Nonnull)dictionary;
 @end
 
 
 @interface MLGitHubRelease (JSONConversion)
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict error:(NSError **)error;
-- (instancetype)initWithJSONDictionary:(NSDictionary *)dict error:(NSError **)error;
++ (instancetype _Nullable)fromJSONDictionary:(NSDictionary *_Nonnull)dict error:(NSError *_Nullable*_Nullable)error;
+- (instancetype _Nullable)initWithJSONDictionary:(NSDictionary *_Nonnull)dict error:(NSError *_Nullable*_Nullable)error;
 @end
 
 
 @interface MLGitHubAsset (JSONConversion)
-+ (instancetype _Nullable)fromJSONDictionary:(NSDictionary *_Nullable)dict error:(NSError **)error;
-- (instancetype _Nullable)initWithJSONDictionary:(NSDictionary *)dict error:(NSError **)error;
++ (instancetype _Nullable)fromJSONDictionary:(NSDictionary *_Nullable)dict error:(NSError *_Nullable*_Nullable)error;
+- (instancetype _Nullable)initWithJSONDictionary:(NSDictionary *_Nonnull)dict error:(NSError *_Nullable*_Nullable)error;
 @end
 
 
 @interface MLGitHubUploader (JSONConversion)
-+ (instancetype _Nullable)fromJSONDictionary:(NSDictionary *_Nonnull)dict error:(NSError **)error;
-- (instancetype _Nullable)initWithJSONDictionary:(NSDictionary *)dict error:(NSError **)error;
++ (instancetype _Nullable)fromJSONDictionary:(NSDictionary *_Nonnull)dict error:(NSError *_Nullable*_Nullable)error;
+- (instancetype _Nullable)initWithJSONDictionary:(NSDictionary *_Nonnull)dict error:(NSError *_Nullable*_Nullable)error;
 @end

@@ -92,7 +92,7 @@ static const NSModalResponse NSModalResponseDownload    = 1002;
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", -)].tag = NSModalResponseCancel;
     
     [alert beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse returnCode) {
-        if (alert.suppressionButton.state == NSOnState) {
+        if (alert.suppressionButton.state == NSControlStateValueOn) {
             // Suppress this alert from now on (for this release only)
             [userDefaults setObject:releaseInfo.name forKey:@"skip"];
         }

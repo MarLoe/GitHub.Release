@@ -42,7 +42,7 @@ typedef void (^MLGitHubAssetCompletionHandler) (NSURLResponse * _Nullable respon
  @remarks       Set the delegate of the asset to follow the download progress.
  @param         completionHandler Called on completion.
  */
-- (void)downloadWithProgressHandler:(MLGitHubAssetProgressHandler)progressHandler andCompletionHandler:(MLGitHubAssetCompletionHandler)completionHandler;
+- (void)downloadWithProgressHandler:(MLGitHubAssetProgressHandler _Nonnull )progressHandler andCompletionHandler:(MLGitHubAssetCompletionHandler _Nonnull )completionHandler;
 //- (void)downloadWithCompletionHandler:(void (^)(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error))completionHandler;
 
 @end
