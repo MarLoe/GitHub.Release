@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MLGitHubObject.h"
-#import "MLGitHubUploader.h"
+#import <GitHubRelease/MLGitHubUploader.h>
 
 @class MLGitHubAsset;
 

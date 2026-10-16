@@ -19,4 +19,5 @@ FOUNDATION_EXPORT const unsigned char GitHubReleaseVersionString[];
 #import <GitHubRelease/MLGitHubUploader.h>
 #import <GitHubRelease/MLGitHubRelease.h>
 #import <GitHubRelease/MLGitHubReleaseChecker.h>
+#import <GitHubRelease/MLGitHubError.h>
 
