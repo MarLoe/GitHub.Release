@@ -50,9 +50,13 @@
 
 - (void)setValue:(nullable id)value forKey:(NSString *)key
 {
-    NSString* propertName = self.properties[key];
+    NSString* propertyName = self.properties[key];
+    if (propertyName == NULL) {
+        // Property is not supported - let's ignore it
+        return;
+    }
     
-    objc_property_t property = class_getProperty([self class], propertName.UTF8String);
+    objc_property_t property = class_getProperty([self class], propertyName.UTF8String);
     if (property == NULL) {
         @throw [NSError errorWithDomain:GitHubReleaseCheckerErrorDomain
                                    code:GitHubReleaseCheckerErrorUnknownProperty
@@ -71,7 +75,7 @@
         value = [dateFormatter dateFromString:value];
     }
     
-    [super setValue:value forKey:propertName];
+    [super setValue:value forKey:propertyName];
 }
 
 @end
