@@ -7,6 +7,7 @@
 //
 
 #import "MLGitHubReleaseChecker.h"
+#import "MLGitHubError.h"
 
 @interface MLGitHubReleaseChecker (NSURLSessionDelegate) <NSURLSessionDelegate>
 @end

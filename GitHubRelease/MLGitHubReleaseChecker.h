@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MLGitHubError.h"
-#import "MLGitHubRelease.h"
+#import <GitHubRelease/MLGitHubRelease.h>
 
 
 @class MLGitHubReleaseChecker;
