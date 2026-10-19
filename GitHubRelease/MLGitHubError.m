@@ -9,3 +9,6 @@
 #import "MLGitHubError.h"
 
 NSErrorDomain const GitHubReleaseCheckerErrorDomain         = @"GitHubReleaseCheckerErrorDomain";
+
+NSErrorUserInfoKey const GitHubReleaseCheckerErrorUnknownPropertyKey    = @"GitHubReleaseCheckerErrorUnknownPropertyKey";
+

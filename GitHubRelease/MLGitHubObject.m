@@ -66,6 +66,7 @@
                                userInfo:@{
                                           NSLocalizedDescriptionKey: @"Error loading GitHub information",
                                           NSLocalizedRecoverySuggestionErrorKey: [NSString stringWithFormat:@"Unknown property: %@.%@", NSStringFromClass([self class]), key],
+                                          GitHubReleaseCheckerErrorUnknownPropertyKey: propertyName,
                                           }];
     }
     const char * type = property_getAttributes(property);
