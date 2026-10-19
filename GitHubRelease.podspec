@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "GitHubRelease"
-  s.version      = "0.5.4"
+  s.version      = "0.6.1"
   s.summary      = "Check your GitHub repo for new releases."
 
   # This description is used to generate tags and improve search results.
@@ -69,10 +69,10 @@ Pod::Spec.new do |s|
   # s.platform     = :ios, "5.0"
 
   #  When using multiple platforms
-  s.ios.deployment_target = "9.0"
-  s.osx.deployment_target = "10.10"
+  s.ios.deployment_target = "15.0"
+  s.osx.deployment_target = "12.0"
   # s.watchos.deployment_target = "2.0"
-  s.tvos.deployment_target = "9.0"
+  s.tvos.deployment_target = "15.0"
 
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

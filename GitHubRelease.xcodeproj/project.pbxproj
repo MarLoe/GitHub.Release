@@ -613,7 +613,7 @@
 				TVOS_DEPLOYMENT_TARGET = 16.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				VERSION_NUMBER = 0.5.3;
+				VERSION_NUMBER = 0.6.1;
 			};
 			name = Debug;
 		};
@@ -671,7 +671,7 @@
 				TVOS_DEPLOYMENT_TARGET = 16.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				VERSION_NUMBER = 0.5.3;
+				VERSION_NUMBER = 0.6.1;
 			};
 			name = Release;
 		};
