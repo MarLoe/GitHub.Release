@@ -6,6 +6,7 @@
 //  Copyright © 2018 Martin Løbger. All rights reserved.
 //
 
+@import OSLog;
 #import "MLGitHubObject.h"
 #import "MLGitHubError.h"
 #import <objc/runtime.h>
@@ -50,15 +51,22 @@
 
 - (void)setValue:(nullable id)value forKey:(NSString *)key
 {
-    NSString* propertName = self.properties[key];
+    NSString* propertyName = self.properties[key];
+    if (propertyName == NULL) {
+        // Property is not supported - let's ignore it
+        os_log_info(OS_LOG_DEFAULT, "Unsupported property from github: '%{public}@' targeting class %{public}@", key, NSStringFromClass([self class]));
+        return;
+    }
     
-    objc_property_t property = class_getProperty([self class], propertName.UTF8String);
+    objc_property_t property = class_getProperty([self class], propertyName.UTF8String);
     if (property == NULL) {
+        os_log_error(OS_LOG_DEFAULT, "Unknown property: '%{public}@'.%{public}@ (%{public}@)", NSStringFromClass([self class]), propertyName, key);
         @throw [NSError errorWithDomain:GitHubReleaseCheckerErrorDomain
                                    code:GitHubReleaseCheckerErrorUnknownProperty
                                userInfo:@{
                                           NSLocalizedDescriptionKey: @"Error loading GitHub information",
                                           NSLocalizedRecoverySuggestionErrorKey: [NSString stringWithFormat:@"Unknown property: %@.%@", NSStringFromClass([self class]), key],
+                                          GitHubReleaseCheckerErrorUnknownPropertyKey: propertyName,
                                           }];
     }
     const char * type = property_getAttributes(property);
@@ -71,7 +79,7 @@
         value = [dateFormatter dateFromString:value];
     }
     
-    [super setValue:value forKey:propertName];
+    [super setValue:value forKey:propertyName];
 }
 
 @end

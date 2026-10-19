@@ -34,6 +34,7 @@ MLGitHubReleases *_Nullable MLGitHubReleaseFromJSON(NSString * _Nonnull json, NS
 @property (nonatomic, nullable, strong) MLGitHubUploader*           author;
 @property (nonatomic, assign)           BOOL                        isPrerelease;
 @property (nonatomic, nullable, copy)   NSDate*                     createdAt;
+@property (nonatomic, nullable, copy)   NSDate*                     updatedAt;
 @property (nonatomic, nullable, copy)   NSDate*                     publishedAt;
 @property (nonatomic, nullable, copy)   NSArray<MLGitHubAsset *>*   assets;
 @property (nonatomic, nullable, copy)   NSURL*                      tarballURL;

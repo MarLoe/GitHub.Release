@@ -91,6 +91,7 @@ MLGitHubReleases *_Nullable MLGitHubReleaseFromJSON(NSString *json, NSStringEnco
                                                        @"author":               @"author",
                                                        @"prerelease":           @"isPrerelease",
                                                        @"created_at":           @"createdAt",
+                                                       @"updated_at":           @"updatedAt",
                                                        @"published_at":         @"publishedAt",
                                                        @"assets":               @"assets",
                                                        @"tarball_url":          @"tarballURL",

@@ -10,6 +10,9 @@
 
 FOUNDATION_EXPORT NSErrorDomain const GitHubReleaseCheckerErrorDomain;
 
+FOUNDATION_EXPORT NSErrorUserInfoKey const GitHubReleaseCheckerErrorUnknownPropertyKey; // NSString, name of the unsupported property
+
+
 NS_ERROR_ENUM(GitHubReleaseCheckerErrorDomain)
 {
     GitHubReleaseCheckerErrorUnknown            =    -1,
